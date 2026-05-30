@@ -3,6 +3,11 @@ import { ShoppingBag, Heart, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 
+const navCategorySlugs = {
+  apparel: "men-fashion-mens-clothing-top-wear-casual-shirts",
+  home: "home-and-living-decor-plants-and-planters-vases",
+};
+
 export function Header() {
   const { user, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
@@ -20,10 +25,10 @@ export function Header() {
           <Link to="/shop" className="ink-link">
             Shop
           </Link>
-          <Link to="/shop" search={{ category: "apparel" } as any} className="ink-link">
+          <Link to="/shop" search={{ category: navCategorySlugs.apparel }} className="ink-link">
             Apparel
           </Link>
-          <Link to="/shop" search={{ category: "home" } as any} className="ink-link">
+          <Link to="/shop" search={{ category: navCategorySlugs.home }} className="ink-link">
             Home
           </Link>
           <Link to="/about" className="ink-link">
@@ -92,12 +97,16 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/shop" search={{ category: "apparel" } as any} className="ink-link">
+                <Link
+                  to="/shop"
+                  search={{ category: navCategorySlugs.apparel }}
+                  className="ink-link"
+                >
                   Apparel
                 </Link>
               </li>
               <li>
-                <Link to="/shop" search={{ category: "home" } as any} className="ink-link">
+                <Link to="/shop" search={{ category: navCategorySlugs.home }} className="ink-link">
                   Home
                 </Link>
               </li>

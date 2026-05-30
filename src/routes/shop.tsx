@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Search } from "lucide-react";
 import { Header, Footer } from "@/components/site/Chrome";
 import { ProductCard } from "@/components/site/ProductCard";
-import { listProducts, listCategories } from "@/lib/shop.functions";
+import { listProducts, listStorefrontCategories } from "@/lib/shop.functions";
 
 const emptyToUndefined = (val: unknown) => (val === "" ? undefined : val);
 
@@ -44,7 +44,8 @@ export const Route = createFileRoute("/shop")({
 
 const productsOpts = (filters: z.infer<typeof searchSchema>) =>
   queryOptions({ queryKey: ["products", filters], queryFn: () => listProducts({ data: filters }) });
-const catsOpts = () => queryOptions({ queryKey: ["categories"], queryFn: () => listCategories() });
+const catsOpts = () =>
+  queryOptions({ queryKey: ["storefront-categories"], queryFn: () => listStorefrontCategories() });
 
 function Shop() {
   const search = Route.useSearch();

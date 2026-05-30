@@ -2,13 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Header, Footer } from "@/components/site/Chrome";
 import { ProductCard } from "@/components/site/ProductCard";
-import { listProducts, listCategories } from "@/lib/shop.functions";
+import { listProducts, listStorefrontCategories } from "@/lib/shop.functions";
 
 const featuredOpts = queryOptions({
   queryKey: ["featured"],
   queryFn: () => listProducts({ data: { featured: true, limit: 8 } }),
 });
-const categoriesOpts = queryOptions({ queryKey: ["categories"], queryFn: () => listCategories() });
+const categoriesOpts = queryOptions({
+  queryKey: ["storefront-categories"],
+  queryFn: () => listStorefrontCategories(),
+});
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) =>
@@ -75,8 +78,8 @@ function Home() {
           </Link>
         </div>
         <div className="grid gap-6 md:grid-cols-4">
-          {categories.map((c) => (
-            <Link key={c.id} to="/shop" search={{ category: c.slug } as any} className="group">
+          {categories.slice(0, 4).map((c) => (
+            <Link key={c.id} to="/shop" search={{ category: c.slug }} className="group">
               <div className="aspect-square overflow-hidden bg-muted">
                 {c.image_url ? (
                   <img
@@ -107,7 +110,7 @@ function Home() {
           </div>
           <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {featured.map((p) => (
-              <ProductCard key={p.id} p={p as any} />
+              <ProductCard key={p.id} p={p} />
             ))}
           </div>
         </div>

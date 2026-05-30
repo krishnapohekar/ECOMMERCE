@@ -175,6 +175,28 @@ export const listCategories = createServerFn({ method: "GET" }).handler(async ()
   throwIfError(await supabaseAdmin.from("categories").select("*").order("sort_order")),
 );
 
+export const listStorefrontCategories = createServerFn({ method: "GET" }).handler(async () => {
+  const rows = throwIfError(
+    await supabaseAdmin
+      .from("products")
+      .select("categories(*)")
+      .eq("is_active", true)
+      .not("category_id", "is", null),
+  );
+
+  const categoriesById = new Map<string, any>();
+  for (const row of rows as any[]) {
+    const category = row.categories;
+    if (category?.id) categoriesById.set(category.id, category);
+  }
+
+  return [...categoriesById.values()].sort(
+    (a, b) =>
+      Number(a.sort_order ?? 999) - Number(b.sort_order ?? 999) ||
+      String(a.name ?? "").localeCompare(String(b.name ?? "")),
+  );
+});
+
 export const getProductBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => z.object({ slug: z.string().min(1).max(200) }).parse(d))
   .handler(async ({ data }) => {
