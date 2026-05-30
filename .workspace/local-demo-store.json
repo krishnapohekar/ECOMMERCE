@@ -1,0 +1,428 @@
+{
+  "products": [
+    {
+      "id": "prod-1",
+      "slug": "linen-overshirt",
+      "name": "Linen Overshirt",
+      "short_description": "Lightweight European linen, unstructured silhouette.",
+      "description": "Cut from a midweight European linen, this overshirt drapes softly and breathes through summer. Mother-of-pearl buttons, twin chest pockets, and a relaxed boxy fit.",
+      "sku": "SH-1",
+      "price": 148,
+      "compare_at_price": 180,
+      "stock": 40,
+      "images": [
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1200"
+      ],
+      "category_id": "cat-apparel",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": true,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:39.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-2",
+      "slug": "merino-crewneck",
+      "name": "Merino Crewneck",
+      "short_description": "Fine-gauge Italian merino.",
+      "description": "A fine-gauge crewneck knit from extra-fine Italian merino wool. Soft hand, temperature regulating, and built for layering.",
+      "sku": "SH-2",
+      "price": 195,
+      "compare_at_price": null,
+      "stock": 24,
+      "images": [
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1200"
+      ],
+      "category_id": "cat-apparel",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": true,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:38.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-3",
+      "slug": "leather-card-holder",
+      "name": "Leather Card Holder",
+      "short_description": "Vegetable-tanned Italian leather.",
+      "description": "Hand-finished card holder in vegetable-tanned full-grain leather. Four card slots and a center pocket. Develops a rich patina with use.",
+      "sku": "SH-3",
+      "price": 58,
+      "compare_at_price": 75,
+      "stock": 119,
+      "images": [
+        "https://images.unsplash.com/photo-1627123424574-724758594e93?w=1200"
+      ],
+      "category_id": "cat-accessories",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": true,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:37.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-4",
+      "slug": "canvas-tote",
+      "name": "Heavyweight Canvas Tote",
+      "short_description": "18oz natural canvas.",
+      "description": "Built from 18oz natural cotton canvas with reinforced bartack stitching and contrast leather handles. Carries a laptop, a book, and the rest of your day.",
+      "sku": "SH-4",
+      "price": 88,
+      "compare_at_price": null,
+      "stock": 67,
+      "images": [
+        "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=1200"
+      ],
+      "category_id": "cat-accessories",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": false,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:36.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-5",
+      "slug": "ceramic-mug-set",
+      "name": "Stoneware Mug - Set of 2",
+      "short_description": "Hand-thrown stoneware.",
+      "description": "A pair of hand-thrown stoneware mugs with a soft matte glaze. Microwave and dishwasher safe.",
+      "sku": "SH-5",
+      "price": 46,
+      "compare_at_price": null,
+      "stock": 84,
+      "images": [
+        "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=1200"
+      ],
+      "category_id": "cat-home",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": true,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:35.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-6",
+      "slug": "linen-throw",
+      "name": "Stonewashed Linen Throw",
+      "short_description": "100% French linen.",
+      "description": "A generously sized throw in stonewashed French linen. Soft from the first use, softer over time.",
+      "sku": "SH-6",
+      "price": 165,
+      "compare_at_price": 210,
+      "stock": 19,
+      "images": [
+        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200"
+      ],
+      "category_id": "cat-home",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": false,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:34.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-7",
+      "slug": "a5-notebook",
+      "name": "Cloth-Bound A5 Notebook",
+      "short_description": "192 pages, 100gsm.",
+      "description": "Cloth-bound A5 notebook with a ribbon marker, 192 pages of 100gsm paper, and an expandable inner pocket.",
+      "sku": "SH-7",
+      "price": 28,
+      "compare_at_price": null,
+      "stock": 210,
+      "images": [
+        "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=1200"
+      ],
+      "category_id": "cat-stationery",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": false,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:33.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    },
+    {
+      "id": "prod-8",
+      "slug": "brass-pen",
+      "name": "Solid Brass Pen",
+      "short_description": "Machined brass body.",
+      "description": "A weighty everyday pen machined from solid brass, fitted with a smooth black-ink refill.",
+      "sku": "SH-8",
+      "price": 64,
+      "compare_at_price": null,
+      "stock": 58,
+      "images": [
+        "https://images.unsplash.com/photo-1583485088034-697b5bc36b92?w=1200"
+      ],
+      "category_id": "cat-stationery",
+      "brand": "Sheetal",
+      "is_active": true,
+      "is_featured": true,
+      "rating_avg": 0,
+      "rating_count": 0,
+      "created_at": "2026-05-30T06:42:32.898Z",
+      "updated_at": "2026-05-30T06:42:39.898Z"
+    }
+  ],
+  "cart": [],
+  "wishlist": [],
+  "reviews": [],
+  "orders": [
+    {
+      "id": "2aabb265-4d6c-4726-b5ba-32b462fd7dad",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0006",
+      "status": "paid",
+      "subtotal": 195,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 15.6,
+      "total": 210.6,
+      "currency": "USD",
+      "coupon_code": null,
+      "shipping_address": {
+        "full_name": "Krushna Pohekar",
+        "line1": "Ravi Nagar",
+        "line2": "Hanuman Mandir road",
+        "city": "Amravati",
+        "state": "Maharashtra",
+        "postal_code": "444605",
+        "country": "US",
+        "phone": "09156745366"
+      },
+      "payment_type": "online",
+      "payment_reference": "pay_ed19ecd5bb64",
+      "created_at": "2026-05-30T07:28:33.509Z",
+      "updated_at": "2026-05-30T07:28:33.509Z"
+    },
+    {
+      "id": "46e38101-506d-4dc7-9851-dbc43e406b1d",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0005",
+      "status": "paid",
+      "subtotal": 195,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 15.6,
+      "total": 210.6,
+      "currency": "USD",
+      "coupon_code": null,
+      "shipping_address": {
+        "full_name": "Krushna Pohekar",
+        "line1": "Ravi Nagar",
+        "line2": "Hanuman Mandir road",
+        "city": "Amravati",
+        "state": "Maharashtra",
+        "postal_code": "444605",
+        "country": "US",
+        "phone": "09156745366"
+      },
+      "payment_type": "online",
+      "created_at": "2026-05-30T07:11:22.270Z",
+      "updated_at": "2026-05-30T07:11:41.511Z",
+      "payment_reference": "TXN-CCBF28BF",
+      "payment_method": "upi"
+    },
+    {
+      "id": "89d70916-45ab-4383-bff0-106577e34a5b",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0004",
+      "status": "paid",
+      "subtotal": 58,
+      "discount": 0,
+      "shipping": 8,
+      "tax": 4.64,
+      "total": 70.64,
+      "currency": "USD",
+      "coupon_code": null,
+      "shipping_address": {
+        "full_name": "Krushna Pohekar",
+        "line1": "Ravi Nagar",
+        "line2": "Hanuman Mandir road",
+        "city": "Amravati",
+        "state": "Maharashtra",
+        "postal_code": "444605",
+        "country": "US",
+        "phone": "09156745366"
+      },
+      "created_at": "2026-05-30T07:05:37.274Z",
+      "updated_at": "2026-05-30T07:28:58.603Z"
+    },
+    {
+      "id": "8c70003f-f634-4cc2-92c5-f69af1c85a4e",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0003",
+      "status": "canceled",
+      "subtotal": 195,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 15.6,
+      "total": 210.6,
+      "currency": "USD",
+      "coupon_code": null,
+      "shipping_address": {
+        "full_name": "Krushna Pohekar",
+        "line1": "Ravi Nagar",
+        "line2": "Hanuman Mandir road",
+        "city": "Amravati",
+        "state": "Maharashtra",
+        "postal_code": "444605",
+        "country": "US",
+        "phone": "09156745366"
+      },
+      "created_at": "2026-05-30T07:01:27.053Z",
+      "updated_at": "2026-05-30T07:29:05.350Z"
+    },
+    {
+      "id": "4955155a-a592-4397-90f8-f2143958b264",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0002",
+      "status": "canceled",
+      "subtotal": 195,
+      "discount": 0,
+      "shipping": 0,
+      "tax": 15.6,
+      "total": 210.6,
+      "currency": "USD",
+      "coupon_code": null,
+      "shipping_address": {
+        "full_name": "Krushna Pohekar",
+        "line1": "Ravi Nagar",
+        "line2": "Hanuman Mandir road",
+        "city": "Amravati",
+        "state": "Maharashtra",
+        "postal_code": "444605",
+        "country": "US",
+        "phone": "09156745366"
+      },
+      "created_at": "2026-05-30T06:52:44.573Z",
+      "updated_at": "2026-05-30T07:29:06.616Z"
+    },
+    {
+      "id": "25bdccb5-cd4d-4303-b43f-eed42164d562",
+      "user_id": "demo-user",
+      "order_number": "SH-260530-0001",
+      "status": "canceled",
+      "subtotal": 296,
+      "discount": 29.6,
+      "shipping": 0,
+      "tax": 21.31,
+      "total": 287.71,
+      "currency": "USD",
+      "coupon_code": "WELCOME10",
+      "shipping_address": {
+        "full_name": "Demo Customer",
+        "line1": "123 Market Street",
+        "line2": "",
+        "city": "Mumbai",
+        "state": "",
+        "postal_code": "400001",
+        "country": "IN",
+        "phone": ""
+      },
+      "created_at": "2026-05-30T06:51:28.359Z",
+      "updated_at": "2026-05-30T07:29:07.831Z"
+    }
+  ],
+  "orderItems": [
+    {
+      "id": "0d7daa7f-1229-4b6c-9c71-b353f21e2b98",
+      "product_id": "prod-1",
+      "name": "Linen Overshirt",
+      "price": 148,
+      "quantity": 2,
+      "image_url": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1200",
+      "order_id": "25bdccb5-cd4d-4303-b43f-eed42164d562"
+    },
+    {
+      "id": "8cdcc187-62f6-4293-95be-9c7e4bf7a3ab",
+      "product_id": "prod-2",
+      "name": "Merino Crewneck",
+      "price": 195,
+      "quantity": 1,
+      "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1200",
+      "order_id": "4955155a-a592-4397-90f8-f2143958b264"
+    },
+    {
+      "id": "682c1205-416e-432f-ae90-0cfc980b187a",
+      "product_id": "prod-2",
+      "name": "Merino Crewneck",
+      "price": 195,
+      "quantity": 1,
+      "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1200",
+      "order_id": "8c70003f-f634-4cc2-92c5-f69af1c85a4e"
+    },
+    {
+      "id": "882108f1-7497-47cd-a8b5-3b04c361692d",
+      "product_id": "prod-3",
+      "name": "Leather Card Holder",
+      "price": 58,
+      "quantity": 1,
+      "image_url": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=1200",
+      "order_id": "89d70916-45ab-4383-bff0-106577e34a5b"
+    },
+    {
+      "id": "d7f34f7b-58a6-4ab8-a33e-f7750aacd47a",
+      "product_id": "prod-2",
+      "name": "Merino Crewneck",
+      "price": 195,
+      "quantity": 1,
+      "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1200",
+      "order_id": "46e38101-506d-4dc7-9851-dbc43e406b1d"
+    },
+    {
+      "id": "838d2d47-b950-434a-a563-391439361397",
+      "product_id": "prod-2",
+      "name": "Merino Crewneck",
+      "price": 195,
+      "quantity": 1,
+      "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1200",
+      "order_id": "2aabb265-4d6c-4726-b5ba-32b462fd7dad"
+    }
+  ],
+  "profile": {
+    "id": "demo-user",
+    "email": "customer@example.com",
+    "full_name": "Demo Customer",
+    "phone": "",
+    "avatar_url": null
+  },
+  "addresses": [],
+  "coupons": [
+    {
+      "id": "coupon-welcome",
+      "code": "WELCOME10",
+      "type": "percent",
+      "value": 10,
+      "min_subtotal": 0,
+      "expires_at": null,
+      "usage_limit": null,
+      "used_count": 1,
+      "is_active": true
+    },
+    {
+      "id": "coupon-ship",
+      "code": "FREESHIP",
+      "type": "free_shipping",
+      "value": 0,
+      "min_subtotal": 75,
+      "expires_at": null,
+      "usage_limit": null,
+      "used_count": 0,
+      "is_active": true
+    }
+  ]
+}
