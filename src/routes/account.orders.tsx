@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listMyOrders } from "@/lib/shop.functions";
-import { formatPrice } from "@/lib/format";
+import { formatDateIST, formatPrice } from "@/lib/format";
 
 export const Route = createFileRoute("/account/orders")({ component: Orders });
 
@@ -39,7 +39,7 @@ function Orders() {
               <div>
                 <div className="font-mono text-sm">{o.order_number}</div>
                 <div className="text-xs text-muted-foreground">
-                  {new Date(o.created_at).toLocaleDateString()} · {o.status}
+                  {formatDateIST(o.created_at)} · {o.status}
                 </div>
               </div>
               <div className="text-sm">{formatPrice(o.total)}</div>

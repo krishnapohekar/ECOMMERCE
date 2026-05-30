@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 import { Header, Footer } from "@/components/site/Chrome";
-import { formatPrice } from "@/lib/format";
+import { formatDateIST, formatDateTimeIST, formatPrice } from "@/lib/format";
 import { useAuth } from "@/lib/auth-context";
 import {
   listMyOrders,
@@ -338,7 +338,7 @@ function AdminPage() {
                       <div>
                         <div className="font-mono font-medium">{o.order_number}</div>
                         <div className="text-xs text-muted-foreground">
-                          {new Date(o.created_at).toLocaleDateString()}
+                          {formatDateIST(o.created_at)}
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -430,7 +430,7 @@ function AdminPage() {
                           <tr key={o.id} className="hover:bg-muted/10 transition-colors">
                             <td className="p-4 font-mono font-medium">{o.order_number}</td>
                             <td className="p-4 text-xs text-muted-foreground">
-                              {new Date(o.created_at).toLocaleString()}
+                              {formatDateTimeIST(o.created_at)}
                             </td>
                             <td className="p-4 font-medium">{addr?.full_name || "N/A"}</td>
                             <td className="p-4 font-mono font-medium">{formatPrice(o.total)}</td>

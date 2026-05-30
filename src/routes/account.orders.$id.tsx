@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getOrderDetail } from "@/lib/shop.functions";
-import { formatPrice } from "@/lib/format";
+import { formatDateTimeIST, formatPrice } from "@/lib/format";
 
 export const Route = createFileRoute("/account/orders/$id")({ component: OrderDetail });
 
@@ -31,7 +31,7 @@ function OrderDetail() {
         <div>
           <h1 className="font-display text-4xl">{data.order.order_number}</h1>
           <div className="mt-2 text-sm text-muted-foreground">
-            {new Date(data.order.created_at).toLocaleString()} · {data.order.status}
+            {formatDateTimeIST(data.order.created_at)} · {data.order.status}
           </div>
         </div>
         <div className="font-display text-2xl">{formatPrice(data.order.total)}</div>
