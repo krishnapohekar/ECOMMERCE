@@ -13,6 +13,7 @@ import {
   listCategories,
   adminUpdateOrderStatus,
   adminUpdateProduct,
+  adminRemoveProduct,
   adminAddProduct,
 } from "@/lib/shop.functions";
 import {
@@ -24,6 +25,7 @@ import {
   Plus,
   Loader2,
   Edit2,
+  Trash2,
   Check,
   X,
   ChevronDown,
@@ -75,6 +77,7 @@ function AdminPage() {
   // Server functions
   const updateStatus = useServerFn(adminUpdateOrderStatus);
   const editProduct = useServerFn(adminUpdateProduct);
+  const removeProduct = useServerFn(adminRemoveProduct);
   const addProduct = useServerFn(adminAddProduct);
 
   // Component State
@@ -90,6 +93,7 @@ function AdminPage() {
     stock: 0,
     brand: "Sheetal",
     is_featured: false,
+    image_url: "",
   });
 
   // Add Product Form State
@@ -142,6 +146,7 @@ function AdminPage() {
       stock: p.stock,
       brand: p.brand ?? "Sheetal",
       is_featured: !!p.is_featured,
+      image_url: Array.isArray(p.images) && typeof p.images[0] === "string" ? p.images[0] : "",
     });
   };
 
@@ -154,6 +159,20 @@ function AdminPage() {
       qc.invalidateQueries({ queryKey: ["products"] });
     } catch (err: any) {
       toast.error(err.message || "Failed to update product");
+    }
+  };
+
+  const handleRemoveProduct = async (id: string, name: string) => {
+    const ok = window.confirm(`Remove "${name}" from the catalog?`);
+    if (!ok) return;
+
+    try {
+      await removeProduct({ data: { id } });
+      toast.success("Product removed from catalog");
+      if (editingProductId === id) setEditingProductId(null);
+      qc.invalidateQueries({ queryKey: ["products"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to remove product");
     }
   };
 
@@ -797,9 +816,9 @@ function AdminPage() {
                           <td className="p-4">
                             <div className="flex items-center gap-3">
                               <div className="h-10 w-9 bg-muted overflow-hidden">
-                                {p.images?.[0] && (
+                                {(isEditing ? editForm.image_url : p.images?.[0]) && (
                                   <img
-                                    src={p.images[0]}
+                                    src={isEditing ? editForm.image_url : p.images[0]}
                                     alt={p.name}
                                     className="h-full w-full object-cover"
                                   />
@@ -820,6 +839,16 @@ function AdminPage() {
                                 <div className="text-[10px] text-muted-foreground uppercase">
                                   {p.slug}
                                 </div>
+                                {isEditing && (
+                                  <input
+                                    value={editForm.image_url}
+                                    onChange={(e) =>
+                                      setEditForm({ ...editForm, image_url: e.target.value })
+                                    }
+                                    placeholder="Image URL"
+                                    className="mt-2 w-64 border border-border bg-background px-2 py-1 text-xs outline-none focus:border-ink"
+                                  />
+                                )}
                               </div>
                             </div>
                           </td>
@@ -922,13 +951,22 @@ function AdminPage() {
                                 </button>
                               </div>
                             ) : (
-                              <button
-                                onClick={() => handleEditClick(p)}
-                                className="text-xs uppercase tracking-widest text-muted-foreground hover:text-ink inline-flex items-center gap-1 border border-border px-2.5 py-1.5 hover:border-ink transition-all"
-                              >
-                                <Edit2 className="h-3 w-3" />
-                                <span>Edit</span>
-                              </button>
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={() => handleEditClick(p)}
+                                  className="text-xs uppercase tracking-widest text-muted-foreground hover:text-ink inline-flex items-center gap-1 border border-border px-2.5 py-1.5 hover:border-ink transition-all"
+                                >
+                                  <Edit2 className="h-3 w-3" />
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  onClick={() => handleRemoveProduct(p.id, p.name)}
+                                  className="text-xs uppercase tracking-widest text-red-700 hover:text-red-800 inline-flex items-center gap-1 border border-red-200 px-2.5 py-1.5 hover:border-red-500 transition-all"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                  <span>Remove</span>
+                                </button>
+                              </div>
                             )}
                           </td>
                         </tr>

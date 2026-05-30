@@ -819,6 +819,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
       stock: number;
       brand: string;
       is_featured: boolean;
+      image_url?: string;
     }) =>
       z
         .object({
@@ -829,6 +830,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
           stock: z.number().nonnegative(),
           brand: z.string().min(1),
           is_featured: z.boolean(),
+          image_url: z.string().url().or(z.literal("")).optional(),
         })
         .parse(d),
   )
@@ -844,9 +846,18 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
           stock: data.stock,
           brand: data.brand,
           is_featured: data.is_featured,
+          images: data.image_url ? [data.image_url] : [],
         })
         .eq("id", data.id),
     );
+    return { ok: true };
+  });
+
+export const adminRemoveProduct = createServerFn({ method: "POST" })
+  .inputValidator((d: { id: string }) => z.object({ id: z.string() }).parse(d))
+  .handler(async ({ data }) => {
+    await requireAdmin();
+    throwIfError(await supabaseAdmin.from("products").delete().eq("id", data.id));
     return { ok: true };
   });
 
