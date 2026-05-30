@@ -1,5 +1,5 @@
-export const formatPrice = (n: number | string, currency = "USD") =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency }).format(
+export const formatPrice = (n: number | string, currency = "INR") =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency }).format(
     typeof n === "string" ? parseFloat(n) : n,
   );
 

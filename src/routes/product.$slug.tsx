@@ -52,7 +52,7 @@ export const Route = createFileRoute("/product/$slug")({
                 offers: {
                   "@type": "Offer",
                   price: p.price,
-                  priceCurrency: "USD",
+                  priceCurrency: "INR",
                   availability:
                     p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
                 },
@@ -193,7 +193,7 @@ function ProductPage() {
             </button>
           </div>
           <div className="mt-6 space-y-1 text-xs text-muted-foreground">
-            <div>Free shipping on orders over $75.</div>
+            <div>Free shipping on orders over ₹75.</div>
             <div>30-day returns.</div>
             {p.sku && <div>SKU: {p.sku}</div>}
           </div>

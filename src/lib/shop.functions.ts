@@ -456,7 +456,7 @@ async function createSupabaseOrder({
         shipping: priced.shipping,
         tax: priced.tax,
         total: priced.total,
-        currency: "USD",
+        currency: "INR",
         coupon_code: priced.coupon?.code ?? null,
         shipping_address: address,
         stripe_session_id: paymentSessionId ?? paymentMethodOption,

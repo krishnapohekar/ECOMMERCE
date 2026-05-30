@@ -203,7 +203,7 @@ CREATE TABLE public.orders (
   shipping NUMERIC(10,2) NOT NULL DEFAULT 0,
   tax NUMERIC(10,2) NOT NULL DEFAULT 0,
   total NUMERIC(10,2) NOT NULL DEFAULT 0,
-  currency TEXT NOT NULL DEFAULT 'USD',
+  currency TEXT NOT NULL DEFAULT 'INR',
   coupon_code TEXT,
   shipping_address JSONB,
   stripe_session_id TEXT,
