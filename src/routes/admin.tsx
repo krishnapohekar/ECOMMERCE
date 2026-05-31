@@ -32,6 +32,11 @@ import {
   ChevronUp,
   Search,
   ArrowUpDown,
+  Upload,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({ component: AdminPage });
@@ -630,6 +635,112 @@ const emptyNewProduct = {
   image_url: "",
 };
 
+type NewProductDraft = typeof emptyNewProduct;
+type CatalogDetails = Record<string, string>;
+
+const mensTshirtCategoryPath = ["Men Fashion", "Mens Clothing", "Top Wear", "T-Shirts"];
+
+const requiredCatalogFields = [
+  "netWeight",
+  "productName",
+  "size",
+  "color",
+  "fabric",
+  "fitShape",
+  "genericName",
+  "netQuantity",
+  "neck",
+  "occasion",
+  "pattern",
+  "printOrPatternType",
+  "sleeveLength",
+  "countryOfOrigin",
+  "manufacturerName",
+  "manufacturerAddress",
+  "manufacturerPincode",
+  "packerName",
+  "packerAddress",
+  "packerPincode",
+  "importerName",
+  "importerAddress",
+  "importerPincode",
+];
+
+const catalogFieldLabels: Record<string, string> = {
+  netWeight: "Net Weight (gms)",
+  styleCode: "Style code/Product ID",
+  productName: "Product Name",
+  size: "Size",
+  color: "Color",
+  fabric: "Fabric",
+  fitShape: "Fit/Shape",
+  genericName: "Generic Name",
+  netQuantity: "Net Quantity (N)",
+  neck: "Neck",
+  occasion: "Occasion",
+  pattern: "Pattern",
+  printOrPatternType: "Print Or Pattern Type",
+  sleeveLength: "Sleeve Length",
+  countryOfOrigin: "COUNTRY OF ORIGIN",
+  manufacturerName: "Manufacturer Name",
+  manufacturerAddress: "Manufacturer Address",
+  manufacturerPincode: "Manufacturer Pincode",
+  packerName: "Packer Name",
+  packerAddress: "Packer Address",
+  packerPincode: "Packer Pincode",
+  importerName: "Importer Name",
+  importerAddress: "Importer Address",
+  importerPincode: "Importer Pincode",
+  brand: "Brand",
+  sku: "SKU",
+  price: "Unit Price",
+  stock: "Stock Count",
+  character: "Character",
+  hemline: "Hemline",
+  length: "Length",
+  numberOfPockets: "Number of Pockets",
+  sleeveStyling: "Sleeve Styling",
+  style: "Style",
+  description: "Description",
+};
+
+const selectOptions: Record<string, string[]> = {
+  size: ["S", "M", "L", "XL", "XXL", "Free Size"],
+  color: ["Black", "White", "Blue", "Green", "Grey", "Maroon", "Red", "Yellow"],
+  fabric: ["Cotton", "Cotton Blend", "Polyester", "Lycra", "Modal", "Knitted"],
+  fitShape: ["Regular Fit", "Slim Fit", "Oversized", "Relaxed Fit", "Muscle Fit"],
+  genericName: ["T-shirt", "Polo T-shirt", "Men Top Wear", "Casual T-shirt"],
+  netQuantity: ["1", "2", "3", "4", "5"],
+  neck: ["Round Neck", "Polo Neck", "V Neck", "Henley Neck", "Hooded"],
+  occasion: ["Casual", "Sports", "Party", "Daily Wear", "Festive"],
+  pattern: ["Solid", "Printed", "Striped", "Colorblocked", "Typography"],
+  printOrPatternType: ["Solid", "Graphic Print", "Typography", "Striped", "Self Design"],
+  sleeveLength: ["Half Sleeve", "Full Sleeve", "Sleeveless", "Three-Quarter Sleeve"],
+  brand: ["Sheetal", "Unbranded"],
+  character: ["None", "Graphic", "Logo", "Text"],
+  hemline: ["Straight", "Curved", "High-Low"],
+  length: ["Regular", "Longline", "Crop"],
+  numberOfPockets: ["0", "1", "2"],
+  sleeveStyling: ["Regular Sleeves", "Raglan Sleeves", "Cuffed Sleeves"],
+  style: ["Casual", "Basic", "Streetwear", "Sports"],
+};
+
+const initialCatalogDetails = Object.keys(catalogFieldLabels).reduce<CatalogDetails>(
+  (details, key) => ({ ...details, [key]: key === "brand" ? "Sheetal" : "" }),
+  {},
+);
+
+const formatCatalogDetails = (details?: CatalogDetails) => {
+  if (!details) return "";
+  return Object.entries(catalogFieldLabels)
+    .map(([key, label]) => {
+      const value = details[key]?.trim();
+      return value ? `${label}: ${value}` : "";
+    })
+    .filter(Boolean)
+    .join("\n");
+};
+
 const collectLeafPaths = (nodes: CategoryNode[], parent: string[] = []): string[][] =>
   nodes.flatMap((node) => {
     const path = [...parent, node.name];
@@ -842,6 +953,407 @@ function CategoryColumnPicker({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CatalogInput({
+  id,
+  value,
+  onChange,
+  required,
+  type = "text",
+  placeholder,
+}: {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  type?: string;
+  placeholder?: string;
+}) {
+  const options = selectOptions[id];
+  const label = catalogFieldLabels[id] ?? id;
+
+  return (
+    <label className="grid grid-cols-[9.5rem_minmax(0,1fr)] items-start gap-3 text-xs">
+      <span className="pt-2 text-right leading-4 text-ink">
+        {label} {required && <span className="text-red-600">*</span>}
+      </span>
+      {options ? (
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-9 w-full border border-[#aeb6c2] bg-background px-3 text-xs text-ink outline-none focus:border-[#4427c7]"
+          required={required}
+        >
+          <option value="">Select</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      ) : id === "description" ? (
+        <div>
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            maxLength={1400}
+            rows={5}
+            placeholder={placeholder ?? "Enter Description"}
+            className="w-full resize-none border border-[#aeb6c2] bg-background px-3 py-2 text-xs text-ink outline-none focus:border-[#4427c7]"
+          />
+          <div className="mt-1 text-right text-[9px] text-muted-foreground">
+            {value.length}/1400
+          </div>
+        </div>
+      ) : (
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder ?? `Enter ${label}`}
+          className="h-9 w-full border border-[#aeb6c2] bg-background px-3 text-xs text-ink outline-none focus:border-[#4427c7]"
+          required={required}
+        />
+      )}
+    </label>
+  );
+}
+
+function CatalogAddWizard({
+  categories,
+  newProduct,
+  setNewProduct,
+  selectedCategoryPath,
+  setSelectedCategoryPath,
+  onClose,
+  onSubmit,
+}: {
+  categories: any[] | undefined;
+  newProduct: NewProductDraft;
+  setNewProduct: (product: NewProductDraft) => void;
+  selectedCategoryPath: string[];
+  setSelectedCategoryPath: (path: string[]) => void;
+  onClose: () => void;
+  onSubmit: (event: React.FormEvent, details?: CatalogDetails) => void;
+}) {
+  const [step, setStep] = useState<"media" | "details">("media");
+  const [catalogDetails, setCatalogDetails] = useState<CatalogDetails>(initialCatalogDetails);
+  const [sameAsManufacturer, setSameAsManufacturer] = useState(false);
+  const imagePreview = newProduct.image_url;
+
+  const updateCatalogDetail = (key: string, value: string) => {
+    setCatalogDetails((current) => {
+      const next = { ...current, [key]: value };
+      if (sameAsManufacturer) {
+        if (key === "manufacturerName") next.packerName = value;
+        if (key === "manufacturerAddress") next.packerAddress = value;
+        if (key === "manufacturerPincode") next.packerPincode = value;
+      }
+      if (key === "productName") setNewProduct({ ...newProduct, name: value });
+      if (key === "brand") setNewProduct({ ...newProduct, brand: value || "Sheetal" });
+      return next;
+    });
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      setNewProduct({ ...newProduct, image_url: result });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const canGoNext = selectedCategoryPath.length > 0 && !!newProduct.category_id && !!imagePreview;
+
+  return (
+    <div className="border border-ink bg-background max-w-6xl">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4">
+        <div>
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+            Add Single Catalog
+          </div>
+          <h3 className="font-display text-2xl">
+            {step === "media" ? "Product Type & Image" : "Product, Size and Inventory"}
+          </h3>
+        </div>
+        <button type="button" onClick={onClose} className="text-muted-foreground hover:text-ink">
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      {step === "media" ? (
+        <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <div className="space-y-5">
+            <CategoryColumnPicker
+              categories={categories}
+              selectedPath={selectedCategoryPath}
+              onSelectPath={(path) => {
+                setSelectedCategoryPath(path);
+                setNewProduct({
+                  ...newProduct,
+                  category_id: findMeeshoCategoryId(path, categories),
+                });
+              }}
+              storeCategoryId={newProduct.category_id}
+            />
+
+            <div className="border border-border bg-muted/10 p-4">
+              <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Product Image
+              </div>
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="flex cursor-pointer items-center gap-3 border border-border bg-background p-4 text-sm transition-all hover:border-ink">
+                  <Upload className="h-5 w-5" />
+                  <span>Upload Image</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="sr-only"
+                  />
+                </label>
+                <label className="relative block">
+                  <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    value={newProduct.image_url.startsWith("data:") ? "" : newProduct.image_url}
+                    onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })}
+                    placeholder="Paste image link"
+                    className="h-full min-h-14 w-full border border-border bg-background pl-10 pr-3 text-sm outline-none focus:border-ink"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="border border-border px-5 py-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:border-ink"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep("details")}
+                disabled={!canGoNext}
+                className="inline-flex items-center gap-2 bg-ink px-5 py-3 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="border border-border bg-background">
+            <div className="border-b border-border bg-[#dde3ed] px-4 py-3 text-center text-xs font-medium">
+              {selectedCategoryPath.length
+                ? selectedCategoryPath.join(" / ")
+                : mensTshirtCategoryPath.join(" / ")}
+            </div>
+            <div className="p-5">
+              <div className="flex aspect-[4/5] items-center justify-center border border-dashed border-border bg-muted/20">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Product preview"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="text-center text-xs text-muted-foreground">
+                    <ImageIcon className="mx-auto mb-2 h-8 w-8" />
+                    Front Image
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 rounded border border-amber-300 bg-amber-50 p-3 text-[11px] text-amber-800">
+                Follow image guidelines to reduce quality check failure.
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={(event) => onSubmit(event, catalogDetails)}
+          className="space-y-5 p-5 text-xs"
+        >
+          <div className="border-b border-border pb-2 font-medium text-[#7f1d1d]">
+            {mensTshirtCategoryPath.join(" / ")}
+          </div>
+
+          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
+            <CatalogInput
+              id="netWeight"
+              type="number"
+              value={catalogDetails.netWeight}
+              onChange={(value) => updateCatalogDetail("netWeight", value)}
+              required
+              placeholder="Enter Net Weight (gms)"
+            />
+            <CatalogInput
+              id="styleCode"
+              value={catalogDetails.styleCode}
+              onChange={(value) => updateCatalogDetail("styleCode", value)}
+              placeholder="Enter Style code/Product ID (optional)"
+            />
+            <CatalogInput
+              id="productName"
+              value={newProduct.name || catalogDetails.productName}
+              onChange={(value) => updateCatalogDetail("productName", value)}
+              required
+              placeholder="Enter Product Name"
+            />
+            <CatalogInput
+              id="size"
+              value={catalogDetails.size}
+              onChange={(value) => updateCatalogDetail("size", value)}
+              required
+            />
+          </div>
+
+          <div className="border-b border-border pb-2 pt-2 font-medium">Product Details</div>
+          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
+            {[
+              "color",
+              "fabric",
+              "fitShape",
+              "genericName",
+              "netQuantity",
+              "neck",
+              "occasion",
+              "pattern",
+              "printOrPatternType",
+              "sleeveLength",
+              "countryOfOrigin",
+              "manufacturerName",
+              "manufacturerAddress",
+              "manufacturerPincode",
+              "packerName",
+              "packerAddress",
+              "packerPincode",
+              "importerName",
+              "importerAddress",
+              "importerPincode",
+            ].map((id) => (
+              <Fragment key={id}>
+                <CatalogInput
+                  id={id}
+                  value={catalogDetails[id]}
+                  onChange={(value) => updateCatalogDetail(id, value)}
+                  required={requiredCatalogFields.includes(id)}
+                />
+                {id === "packerName" && (
+                  <label className="lg:col-start-1 lg:ml-[10.25rem] flex items-center gap-2 text-[11px] text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={sameAsManufacturer}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setSameAsManufacturer(checked);
+                        if (checked) {
+                          setCatalogDetails((current) => ({
+                            ...current,
+                            packerName: current.manufacturerName,
+                            packerAddress: current.manufacturerAddress,
+                            packerPincode: current.manufacturerPincode,
+                          }));
+                        }
+                      }}
+                      className="h-4 w-4 accent-ink"
+                    />
+                    Same as Manufacturer Details
+                  </label>
+                )}
+              </Fragment>
+            ))}
+          </div>
+
+          <div className="border-b border-border pb-2 pt-2 font-medium">Other Attributes</div>
+          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
+            {[
+              "brand",
+              "character",
+              "hemline",
+              "length",
+              "numberOfPockets",
+              "sleeveStyling",
+              "style",
+            ].map((id) => (
+              <CatalogInput
+                key={id}
+                id={id}
+                value={id === "brand" ? newProduct.brand : catalogDetails[id]}
+                onChange={(value) => updateCatalogDetail(id, value)}
+              />
+            ))}
+            <CatalogInput
+              id="description"
+              value={catalogDetails.description}
+              onChange={(value) => updateCatalogDetail("description", value)}
+            />
+          </div>
+
+          <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-3">
+            <CatalogInput
+              id="sku"
+              value={newProduct.sku}
+              onChange={(value) => setNewProduct({ ...newProduct, sku: value })}
+              required
+              placeholder="Enter SKU"
+            />
+            <CatalogInput
+              id="price"
+              type="number"
+              value={newProduct.price ? String(newProduct.price) : ""}
+              onChange={(value) => setNewProduct({ ...newProduct, price: parseFloat(value) || 0 })}
+              required
+              placeholder="Enter Unit Price"
+            />
+            <CatalogInput
+              id="stock"
+              type="number"
+              value={newProduct.stock ? String(newProduct.stock) : ""}
+              onChange={(value) =>
+                setNewProduct({ ...newProduct, stock: parseInt(value, 10) || 0 })
+              }
+              required
+              placeholder="Enter Stock Count"
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <button
+              type="button"
+              onClick={() => setStep("media")}
+              className="inline-flex items-center justify-center gap-2 border border-border px-5 py-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:border-ink"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="border border-border px-5 py-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:border-ink"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-widest text-primary-foreground hover:opacity-90"
+              >
+                Save Product
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
@@ -1064,7 +1576,7 @@ function AdminPage() {
   };
 
   // Add Product Submit
-  const handleAddProductSubmit = async (e: React.FormEvent) => {
+  const handleAddProductSubmit = async (e: React.FormEvent, catalogDetails?: CatalogDetails) => {
     e.preventDefault();
     if (!newProduct.category_id) {
       toast.error(
@@ -1078,10 +1590,29 @@ function AdminPage() {
       // Auto-generate slug from name if empty
       const slug =
         newProduct.slug.trim() || newProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const formattedCatalogDetails = formatCatalogDetails(catalogDetails);
+      const shortDescription =
+        newProduct.short_description.trim() ||
+        [
+          catalogDetails?.fabric,
+          catalogDetails?.fitShape,
+          catalogDetails?.neck,
+          catalogDetails?.sleeveLength,
+        ]
+          .filter(Boolean)
+          .join(" | ") ||
+        "Men's T-shirt";
+      const description =
+        newProduct.description.trim() ||
+        [catalogDetails?.description, formattedCatalogDetails].filter(Boolean).join("\n\n");
+
       await addProduct({
         data: {
           ...newProduct,
           slug,
+          short_description: shortDescription,
+          description,
+          brand: newProduct.brand || catalogDetails?.brand || "Sheetal",
           image_url: newProduct.image_url || undefined,
         },
       });
@@ -1483,183 +2014,15 @@ function AdminPage() {
 
             {/* Inline editing overlay/dialog for Add Product */}
             {showAddForm && (
-              <div className="border border-ink bg-background p-6 max-w-6xl space-y-6">
-                <div className="flex justify-between items-center border-b border-border pb-3">
-                  <h3 className="font-display text-xl">New Master Catalog Product</h3>
-                  <button
-                    onClick={() => setShowAddForm(false)}
-                    className="text-muted-foreground hover:text-ink"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-
-                <form onSubmit={handleAddProductSubmit} className="grid gap-4 sm:grid-cols-2">
-                  <label className="block sm:col-span-2">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Product Name
-                    </span>
-                    <input
-                      value={newProduct.name}
-                      onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                      placeholder="e.g. Stoneware Vase"
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      SKU
-                    </span>
-                    <input
-                      value={newProduct.sku}
-                      onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
-                      placeholder="e.g. SH-09"
-                      className="w-full border border-border bg-background px-4 py-2 text-sm font-mono outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Slug (Optional)
-                    </span>
-                    <input
-                      value={newProduct.slug}
-                      onChange={(e) => setNewProduct({ ...newProduct, slug: e.target.value })}
-                      placeholder="e.g. stoneware-vase"
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                    />
-                  </label>
-
-                  <CategoryColumnPicker
-                    categories={categories}
-                    selectedPath={selectedCategoryPath}
-                    onSelectPath={(path) => {
-                      setSelectedCategoryPath(path);
-                      setNewProduct({
-                        ...newProduct,
-                        category_id: findMeeshoCategoryId(path, categories),
-                      });
-                    }}
-                    storeCategoryId={newProduct.category_id}
-                  />
-
-                  <label className="block">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Brand
-                    </span>
-                    <input
-                      value={newProduct.brand}
-                      onChange={(e) => setNewProduct({ ...newProduct, brand: e.target.value })}
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Unit Price
-                    </span>
-                    <input
-                      type="number"
-                      min="1"
-                      value={newProduct.price || ""}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, price: parseFloat(e.target.value) || 0 })
-                      }
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Stock Count
-                    </span>
-                    <input
-                      type="number"
-                      min="0"
-                      value={newProduct.stock ?? ""}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, stock: parseInt(e.target.value, 10) ?? 0 })
-                      }
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block sm:col-span-2">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Image URL (Optional)
-                    </span>
-                    <input
-                      value={newProduct.image_url}
-                      onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })}
-                      placeholder="e.g. https://images.unsplash.com/..."
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                    />
-                  </label>
-
-                  <label className="block sm:col-span-2">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Short Description
-                    </span>
-                    <input
-                      value={newProduct.short_description}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, short_description: e.target.value })
-                      }
-                      className="w-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-ink"
-                      required
-                    />
-                  </label>
-
-                  <label className="block sm:col-span-2">
-                    <span className="mb-1 block text-xs uppercase tracking-widest text-muted-foreground">
-                      Full Description
-                    </span>
-                    <textarea
-                      value={newProduct.description}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, description: e.target.value })
-                      }
-                      rows={3}
-                      className="w-full border border-border bg-background p-4 text-sm outline-none focus:border-ink resize-none"
-                      required
-                    />
-                  </label>
-
-                  <label className="flex items-center gap-2 text-sm sm:col-span-2 py-2">
-                    <input
-                      type="checkbox"
-                      checked={newProduct.is_featured}
-                      onChange={(e) =>
-                        setNewProduct({ ...newProduct, is_featured: e.target.checked })
-                      }
-                      className="h-4 w-4 accent-ink"
-                    />
-                    Mark as Featured Product
-                  </label>
-
-                  <div className="flex gap-3 sm:col-span-2 border-t border-border pt-4">
-                    <button
-                      type="submit"
-                      className="bg-ink px-6 py-3 text-xs uppercase tracking-widest text-primary-foreground font-semibold"
-                    >
-                      Save Product
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowAddForm(false)}
-                      className="border border-border px-6 py-3 text-xs uppercase tracking-widest text-muted-foreground hover:border-ink transition-all"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <CatalogAddWizard
+                categories={categories}
+                newProduct={newProduct}
+                setNewProduct={setNewProduct}
+                selectedCategoryPath={selectedCategoryPath}
+                setSelectedCategoryPath={setSelectedCategoryPath}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddProductSubmit}
+              />
             )}
 
             {/* Inventory Listing */}

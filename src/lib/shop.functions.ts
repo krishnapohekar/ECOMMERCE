@@ -70,8 +70,16 @@ async function ensureProfile(user: { id: string; email?: string | null; user_met
 }
 
 function imagesArray(images: unknown): string[] {
-  return Array.isArray(images) ? images.filter((src): src is string => typeof src === "string") : [];
+  return Array.isArray(images)
+    ? images.filter((src): src is string => typeof src === "string")
+    : [];
 }
+
+const imageSourceSchema = z
+  .string()
+  .refine((value) => value.startsWith("data:image/") || z.string().url().safeParse(value).success, {
+    message: "Image must be a URL or uploaded image data",
+  });
 
 function calculateDiscount(coupon: any, subtotal: number) {
   if (!coupon || !coupon.is_active || subtotal < Number(coupon.min_subtotal)) {
@@ -338,7 +346,9 @@ export const updateCartItem = createServerFn({ method: "POST" })
     }
     const stock = Number((row as any).products?.stock ?? 0);
     if (data.quantity > stock) throw new Error(`Only ${stock} available`);
-    throwIfError(await supabaseAdmin.from("cart_items").update({ quantity: data.quantity }).eq("id", row.id));
+    throwIfError(
+      await supabaseAdmin.from("cart_items").update({ quantity: data.quantity }).eq("id", row.id),
+    );
     return { ok: true };
   });
 
@@ -423,7 +433,8 @@ async function priceCart(cart: any[], couponCode?: string) {
   const items = cart.map((c) => {
     const product = c.products;
     if (!product?.is_active) throw new Error("Product unavailable");
-    if (c.quantity > product.stock) throw new Error(`${product.name} only has ${product.stock} left in stock`);
+    if (c.quantity > product.stock)
+      throw new Error(`${product.name} only has ${product.stock} left in stock`);
     subtotal += Number(product.price) * c.quantity;
     return { row: c, product };
   });
@@ -623,7 +634,8 @@ export const payOrder = createServerFn({ method: "POST" })
         amount: order.total,
         orderNumber: order.order_number,
       });
-      if (!response.authorized) throw new Error(response.declineReason || "Card transaction declined");
+      if (!response.authorized)
+        throw new Error(response.declineReason || "Card transaction declined");
       reference = response.transactionId;
     } else if (data.paymentMethod === "upi") {
       if (!data.vpa) throw new Error("UPI VPA ID is required");
@@ -632,7 +644,8 @@ export const payOrder = createServerFn({ method: "POST" })
         amount: order.total,
         orderNumber: order.order_number,
       });
-      if (!response.authorized) throw new Error(response.declineReason || "UPI transaction declined");
+      if (!response.authorized)
+        throw new Error(response.declineReason || "UPI transaction declined");
       reference = response.transactionId;
     }
 
@@ -695,10 +708,19 @@ export const saveAddress = createServerFn({ method: "POST" })
         await supabaseAdmin.from("addresses").update({ is_default: false }).eq("user_id", user.id),
       );
     }
-    const address = { ...data, user_id: user.id, line2: data.line2 ?? null, phone: data.phone ?? null };
+    const address = {
+      ...data,
+      user_id: user.id,
+      line2: data.line2 ?? null,
+      phone: data.phone ?? null,
+    };
     if (data.id) {
       throwIfError(
-        await supabaseAdmin.from("addresses").update(address).eq("id", data.id).eq("user_id", user.id),
+        await supabaseAdmin
+          .from("addresses")
+          .update(address)
+          .eq("id", data.id)
+          .eq("user_id", user.id),
       );
     } else {
       const { id, ...insertAddress } = address;
@@ -729,7 +751,9 @@ export const initiateOnlinePayment = createServerFn({ method: "POST" })
     const keyId = process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     if (!keyId || !keySecret) {
-      throw new Error("Missing Razorpay keys. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env.");
+      throw new Error(
+        "Missing Razorpay keys. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env.",
+      );
     }
 
     const amountInPaise = Math.round(priced.total * 100);
@@ -852,7 +876,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
           stock: z.number().nonnegative(),
           brand: z.string().min(1),
           is_featured: z.boolean(),
-          image_url: z.string().url().or(z.literal("")).optional(),
+          image_url: imageSourceSchema.or(z.literal("")).optional(),
         })
         .parse(d),
   )
@@ -910,7 +934,7 @@ export const adminAddProduct = createServerFn({ method: "POST" })
           category_id: z.string().min(1),
           brand: z.string().min(1),
           is_featured: z.boolean(),
-          image_url: z.string().url().optional(),
+          image_url: imageSourceSchema.optional(),
         })
         .parse(d),
   )
