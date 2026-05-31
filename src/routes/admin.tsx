@@ -1520,66 +1520,68 @@ function CategoryColumnPicker({
         )}
       </div>
 
-      <div className="grid gap-5 p-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <div className="grid gap-3 md:grid-cols-4">
-          {columns.map((nodes, columnIndex) => (
-            <div key={columnIndex} className="min-h-56 bg-background shadow-sm">
-              <div className="border-b border-border px-3 py-3 text-xs font-medium text-ink">
-                {columnIndex === 0
-                  ? "Your Categories"
-                  : columnIndex === 1
-                    ? activePath[0] || "Section"
-                    : columnIndex === 2
-                      ? activePath[1] || "Type"
-                      : activePath[2] || "Sub-Type"}
-              </div>
-              <div className="max-h-72 overflow-y-auto p-2">
-                {nodes.map((node) => {
-                  const isActive = activePath[columnIndex] === node.name;
-                  const isLeafSelected =
-                    selectedPath.join("/") ===
-                    [...activePath.slice(0, columnIndex), node.name].join("/");
-                  return (
-                    <button
-                      key={node.name}
-                      type="button"
-                      onClick={() => handleNodeClick(node, columnIndex)}
-                      className={`mb-1 flex w-full items-center justify-between px-3 py-2.5 text-left text-xs transition-all ${
-                        isActive || isLeafSelected
-                          ? "bg-[#4427c7] text-white"
-                          : "bg-background text-ink hover:bg-[#ebe7ff]"
-                      }`}
-                    >
-                      <span>{node.name}</span>
-                      {node.children?.length ? (
-                        <ChevronDown className="h-3 w-3 -rotate-90" />
-                      ) : null}
-                    </button>
-                  );
-                })}
-              </div>
-              {columnIndex === 0 && (
-                <div className="border-t border-border px-3 py-3 text-[10px]">
-                  <div className="text-muted-foreground">Can't find the category?</div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const input = document.querySelector<HTMLInputElement>(
-                        "input[placeholder='Search Meesho category']",
-                      );
-                      input?.focus();
-                    }}
-                    className="mt-1 font-semibold text-[#4427c7]"
-                  >
-                    Search Category
-                  </button>
+      <div className="grid gap-5 p-4 xl:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="overflow-x-auto pb-2">
+          <div className="grid min-w-[46rem] grid-cols-4 gap-3">
+            {columns.map((nodes, columnIndex) => (
+              <div key={columnIndex} className="h-[34rem] min-w-0 bg-background shadow-sm">
+                <div className="border-b border-border px-3 py-3 text-xs font-medium text-ink">
+                  {columnIndex === 0
+                    ? "Your Categories"
+                    : columnIndex === 1
+                      ? activePath[0] || "Section"
+                      : columnIndex === 2
+                        ? activePath[1] || "Type"
+                        : activePath[2] || "Sub-Type"}
                 </div>
-              )}
-            </div>
-          ))}
+                <div className="h-[27rem] overflow-y-auto p-2">
+                  {nodes.map((node) => {
+                    const isActive = activePath[columnIndex] === node.name;
+                    const isLeafSelected =
+                      selectedPath.join("/") ===
+                      [...activePath.slice(0, columnIndex), node.name].join("/");
+                    return (
+                      <button
+                        key={node.name}
+                        type="button"
+                        onClick={() => handleNodeClick(node, columnIndex)}
+                        className={`mb-1 flex min-h-11 w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-xs leading-tight transition-all ${
+                          isActive || isLeafSelected
+                            ? "bg-[#4427c7] text-white"
+                            : "bg-background text-ink hover:bg-[#ebe7ff]"
+                        }`}
+                      >
+                        <span className="min-w-0 break-words">{node.name}</span>
+                        {node.children?.length ? (
+                          <ChevronDown className="h-3 w-3 -rotate-90" />
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
+                {columnIndex === 0 && (
+                  <div className="border-t border-border px-3 py-3 text-[10px]">
+                    <div className="text-muted-foreground">Can't find the category?</div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const input = document.querySelector<HTMLInputElement>(
+                          "input[placeholder='Search Meesho category']",
+                        );
+                        input?.focus();
+                      }}
+                      className="mt-1 font-semibold text-[#4427c7]"
+                    >
+                      Search Category
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="bg-background shadow-sm">
+        <div className="bg-background shadow-sm xl:min-h-[34rem]">
           <div className="bg-[#dde3ed] px-4 py-3 text-center text-[10px] text-ink">
             {selectedPath.length ? selectedPath.join(" / ") : "Choose a category path"}
           </div>
@@ -1797,7 +1799,7 @@ function CatalogAddWizard({
   const canGoNext = selectedCategoryPath.length > 0 && !!newProduct.category_id && !!imagePreview;
 
   return (
-    <div className="border border-ink bg-background max-w-6xl">
+    <div className="w-[min(96vw,92rem)] border border-ink bg-background">
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div>
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -1813,7 +1815,7 @@ function CatalogAddWizard({
       </div>
 
       {step === "media" ? (
-        <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="grid gap-5 p-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
           <div className="space-y-5">
             <CategoryColumnPicker
               categories={categories}
