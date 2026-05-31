@@ -633,7 +633,7 @@ const emptyNewProduct = {
   shipping_cost: 0,
   stock: 0,
   category_id: "",
-  brand: "Sheetal",
+  brand: "",
   is_featured: false,
   image_url: "",
 };
@@ -821,7 +821,7 @@ const selectOptions: Record<string, string[]> = {
 };
 
 const initialCatalogDetails = Object.keys(catalogFieldLabels).reduce<CatalogDetails>(
-  (details, key) => ({ ...details, [key]: key === "brand" ? "Sheetal" : "" }),
+  (details, key) => ({ ...details, [key]: "" }),
   {},
 );
 
@@ -1713,7 +1713,7 @@ function CatalogAddWizard({
         if (key === "manufacturerPincode") next.packerPincode = value;
       }
       if (key === "productName") setNewProduct({ ...newProduct, name: value });
-      if (key === "brand") setNewProduct({ ...newProduct, brand: value || "Sheetal" });
+      if (key === "brand") setNewProduct({ ...newProduct, brand: value });
       return next;
     });
   };
@@ -2062,7 +2062,7 @@ function AdminPage() {
     sku: "",
     price: 0,
     stock: 0,
-    brand: "Sheetal",
+    brand: "",
     is_featured: false,
     image_url: "",
   });
@@ -2202,7 +2202,7 @@ function AdminPage() {
       sku: p.sku ?? `SH-${p.id}`,
       price: Number(p.price),
       stock: p.stock,
-      brand: p.brand ?? "Sheetal",
+      brand: p.brand ?? "",
       is_featured: !!p.is_featured,
       image_url: Array.isArray(p.images) && typeof p.images[0] === "string" ? p.images[0] : "",
     });
@@ -2286,7 +2286,7 @@ function AdminPage() {
           slug,
           short_description: shortDescription,
           description,
-          brand: newProduct.brand || catalogDetails?.brand || "Sheetal",
+          brand: newProduct.brand || catalogDetails?.brand || "",
           image_url: newProduct.image_url || undefined,
         },
       });
@@ -2928,7 +2928,7 @@ function AdminPage() {
                                     className="border border-border px-2 py-1 text-sm bg-background w-20"
                                   />
                                 ) : (
-                                  p.brand || "Sheetal"
+                                  p.brand || "-"
                                 )}
                               </td>
                               <td className="p-4">

@@ -863,7 +863,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
       sku: string;
       price: number;
       stock: number;
-      brand: string;
+      brand?: string | null;
       is_featured: boolean;
       image_url?: string;
     }) =>
@@ -874,7 +874,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
           sku: z.string().min(1),
           price: z.number().positive(),
           stock: z.number().nonnegative(),
-          brand: z.string().min(1),
+          brand: z.string().optional().nullable(),
           is_featured: z.boolean(),
           image_url: imageSourceSchema.or(z.literal("")).optional(),
         })
@@ -890,7 +890,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
           sku: data.sku,
           price: data.price,
           stock: data.stock,
-          brand: data.brand,
+          brand: data.brand?.trim() || null,
           is_featured: data.is_featured,
           images: data.image_url ? [data.image_url] : [],
         })
@@ -919,7 +919,7 @@ export const adminAddProduct = createServerFn({ method: "POST" })
       compare_at_price?: number;
       stock: number;
       category_id: string;
-      brand: string;
+      brand?: string | null;
       is_featured: boolean;
       image_url?: string;
     }) =>
@@ -934,7 +934,7 @@ export const adminAddProduct = createServerFn({ method: "POST" })
           compare_at_price: z.number().positive().optional(),
           stock: z.number().nonnegative(),
           category_id: z.string().min(1),
-          brand: z.string().min(1),
+          brand: z.string().optional().nullable(),
           is_featured: z.boolean(),
           image_url: imageSourceSchema.optional(),
         })
@@ -942,12 +942,13 @@ export const adminAddProduct = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     await requireAdmin();
-    const { image_url, ...product } = data;
+    const { image_url, brand, ...product } = data;
     const row = throwIfError(
       await supabaseAdmin
         .from("products")
         .insert({
           ...product,
+          brand: brand?.trim() || null,
           images: [
             image_url ?? "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=1200",
           ],
