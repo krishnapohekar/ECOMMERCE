@@ -812,7 +812,6 @@ const selectOptions: Record<string, string[]> = {
   ruling: ["Plain", "Ruled", "Dotted", "Grid", "Single Line"],
   inkColor: ["Blue", "Black", "Red", "Green", "Multicolor"],
   packOf: ["1", "2", "3", "4", "5", "6", "10", "12"],
-  brand: ["Sheetal", "Unbranded"],
   character: ["None", "Graphic", "Logo", "Text"],
   hemline: ["Straight", "Curved", "High-Low"],
   length: ["Regular", "Longline", "Crop"],
