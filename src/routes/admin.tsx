@@ -638,22 +638,13 @@ const emptyNewProduct = {
 type NewProductDraft = typeof emptyNewProduct;
 type CatalogDetails = Record<string, string>;
 
-const mensTshirtCategoryPath = ["Men Fashion", "Mens Clothing", "Top Wear", "T-Shirts"];
+type CatalogSchema = {
+  title: string;
+  requiredFields: string[];
+  sections: Array<{ title?: string; fields: string[] }>;
+};
 
-const requiredCatalogFields = [
-  "netWeight",
-  "productName",
-  "size",
-  "color",
-  "fabric",
-  "fitShape",
-  "genericName",
-  "netQuantity",
-  "neck",
-  "occasion",
-  "pattern",
-  "printOrPatternType",
-  "sleeveLength",
+const complianceFields = [
   "countryOfOrigin",
   "manufacturerName",
   "manufacturerAddress",
@@ -664,6 +655,14 @@ const requiredCatalogFields = [
   "importerName",
   "importerAddress",
   "importerPincode",
+];
+
+const defaultRequiredFields = [
+  "netWeight",
+  "productName",
+  "genericName",
+  "netQuantity",
+  ...complianceFields,
 ];
 
 const catalogFieldLabels: Record<string, string> = {
@@ -681,6 +680,49 @@ const catalogFieldLabels: Record<string, string> = {
   pattern: "Pattern",
   printOrPatternType: "Print Or Pattern Type",
   sleeveLength: "Sleeve Length",
+  bottomType: "Bottom Type",
+  waistSize: "Waist Size",
+  rise: "Rise",
+  closure: "Closure",
+  border: "Border",
+  blouse: "Blouse",
+  dupatta: "Dupatta",
+  work: "Work",
+  material: "Material",
+  soleMaterial: "Sole Material",
+  upperMaterial: "Upper Material",
+  toeShape: "Toe Shape",
+  strapMaterial: "Strap Material",
+  dialShape: "Dial Shape",
+  displayType: "Display Type",
+  warranty: "Warranty",
+  compartments: "Compartments",
+  dimensions: "Dimensions",
+  capacity: "Capacity",
+  threadCount: "Thread Count",
+  fillMaterial: "Fill Material",
+  powerSource: "Power Source",
+  plantType: "Plant Type",
+  frameMaterial: "Frame Material",
+  cookwareCompatibility: "Cookware Compatibility",
+  ageGroup: "Age Group",
+  batteryRequired: "Battery Required",
+  skillSet: "Skill Set",
+  productForm: "Product Form",
+  skinType: "Skin Type",
+  hairType: "Hair Type",
+  ingredients: "Ingredients",
+  expiry: "Expiry/Shelf Life",
+  modelName: "Model Name",
+  ram: "RAM",
+  storage: "Storage",
+  compatibleDevices: "Compatible Devices",
+  connectorType: "Connector Type",
+  power: "Power",
+  pages: "Pages",
+  ruling: "Ruling",
+  inkColor: "Ink Color",
+  packOf: "Pack Of",
   countryOfOrigin: "COUNTRY OF ORIGIN",
   manufacturerName: "Manufacturer Name",
   manufacturerAddress: "Manufacturer Address",
@@ -716,6 +758,50 @@ const selectOptions: Record<string, string[]> = {
   pattern: ["Solid", "Printed", "Striped", "Colorblocked", "Typography"],
   printOrPatternType: ["Solid", "Graphic Print", "Typography", "Striped", "Self Design"],
   sleeveLength: ["Half Sleeve", "Full Sleeve", "Sleeveless", "Three-Quarter Sleeve"],
+  bottomType: ["Jeans", "Trousers", "Shorts", "Track Pants", "Leggings", "Skirt"],
+  waistSize: ["26", "28", "30", "32", "34", "36", "38", "40", "Free Size"],
+  rise: ["Low Rise", "Mid Rise", "High Rise"],
+  closure: ["Button", "Drawstring", "Elastic", "Hook", "Lace-Up", "Slip-On", "Zip"],
+  border: ["No Border", "Printed Border", "Woven Border", "Zari Border", "Lace Border"],
+  blouse: ["With Blouse", "Without Blouse", "Unstitched Blouse"],
+  dupatta: ["With Dupatta", "Without Dupatta"],
+  work: ["Printed", "Embroidered", "Sequinned", "Zari", "Solid", "Self Design"],
+  material: [
+    "Cotton",
+    "Polyester",
+    "Plastic",
+    "Stainless Steel",
+    "Wood",
+    "Glass",
+    "Leather",
+    "Faux Leather",
+    "Rubber",
+    "Metal",
+    "Paper",
+    "Silicone",
+  ],
+  soleMaterial: ["Rubber", "EVA", "PU", "TPR", "PVC"],
+  upperMaterial: ["Canvas", "Synthetic", "Leather", "Mesh", "Textile", "Rubber"],
+  toeShape: ["Round Toe", "Open Toe", "Pointed Toe", "Square Toe"],
+  strapMaterial: ["Leather", "Stainless Steel", "Silicone", "PU", "Fabric"],
+  dialShape: ["Round", "Square", "Rectangle", "Oval"],
+  displayType: ["Analog", "Digital", "Analog-Digital", "Smart"],
+  warranty: ["No Warranty", "3 Months", "6 Months", "1 Year", "2 Years"],
+  powerSource: ["Battery", "Electric", "USB", "Solar", "Not Applicable"],
+  plantType: ["Artificial Plant", "Flower", "Grass", "Bonsai", "Succulent"],
+  cookwareCompatibility: ["Gas", "Induction", "Microwave", "Oven", "Dishwasher Safe"],
+  ageGroup: ["0-6 Months", "6-12 Months", "1-2 Years", "2-5 Years", "5-8 Years", "8+ Years"],
+  batteryRequired: ["Yes", "No"],
+  skillSet: ["Motor Skills", "Learning", "Creativity", "Memory", "Problem Solving"],
+  productForm: ["Cream", "Gel", "Liquid", "Oil", "Powder", "Tablet", "Spray"],
+  skinType: ["All Skin Types", "Dry", "Oily", "Sensitive", "Combination"],
+  hairType: ["All Hair Types", "Dry", "Oily", "Curly", "Straight", "Damaged"],
+  ram: ["2 GB", "3 GB", "4 GB", "6 GB", "8 GB", "12 GB"],
+  storage: ["16 GB", "32 GB", "64 GB", "128 GB", "256 GB", "512 GB"],
+  connectorType: ["USB", "USB-C", "Micro USB", "Lightning", "Bluetooth", "3.5mm"],
+  ruling: ["Plain", "Ruled", "Dotted", "Grid", "Single Line"],
+  inkColor: ["Blue", "Black", "Red", "Green", "Multicolor"],
+  packOf: ["1", "2", "3", "4", "5", "6", "10", "12"],
   brand: ["Sheetal", "Unbranded"],
   character: ["None", "Graphic", "Logo", "Text"],
   hemline: ["Straight", "Curved", "High-Low"],
@@ -729,6 +815,380 @@ const initialCatalogDetails = Object.keys(catalogFieldLabels).reduce<CatalogDeta
   (details, key) => ({ ...details, [key]: key === "brand" ? "Sheetal" : "" }),
   {},
 );
+
+const createSchema = (
+  title: string,
+  sections: CatalogSchema["sections"],
+  requiredFields: string[] = [],
+): CatalogSchema => ({
+  title,
+  sections: [
+    {
+      title: "Product, Size and Inventory",
+      fields: ["netWeight", "styleCode", "productName", "genericName", "netQuantity"],
+    },
+    ...sections,
+    { title: "Compliance Details", fields: complianceFields },
+    {
+      title: "Other Attributes",
+      fields: ["brand", "description"],
+    },
+  ],
+  requiredFields: [...new Set([...defaultRequiredFields, ...requiredFields])],
+});
+
+const catalogSchemas = {
+  clothingTopWear: createSchema(
+    "Clothing Top Wear Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "size",
+          "color",
+          "fabric",
+          "fitShape",
+          "neck",
+          "occasion",
+          "pattern",
+          "printOrPatternType",
+          "sleeveLength",
+        ],
+      },
+      {
+        title: "Other Attributes",
+        fields: ["character", "hemline", "length", "numberOfPockets", "sleeveStyling", "style"],
+      },
+    ],
+    ["size", "color", "fabric", "fitShape", "neck", "occasion", "pattern", "sleeveLength"],
+  ),
+  clothingBottomWear: createSchema(
+    "Clothing Bottom Wear Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "bottomType",
+          "waistSize",
+          "size",
+          "color",
+          "fabric",
+          "fitShape",
+          "rise",
+          "closure",
+          "pattern",
+          "occasion",
+          "length",
+          "numberOfPockets",
+        ],
+      },
+    ],
+    ["bottomType", "waistSize", "color", "fabric", "fitShape", "closure"],
+  ),
+  ethnicWear: createSchema(
+    "Ethnic Wear Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "size",
+          "color",
+          "fabric",
+          "occasion",
+          "pattern",
+          "printOrPatternType",
+          "work",
+          "border",
+          "blouse",
+          "dupatta",
+          "sleeveLength",
+          "neck",
+        ],
+      },
+    ],
+    ["color", "fabric", "occasion", "pattern"],
+  ),
+  footwear: createSchema(
+    "Footwear Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "size",
+          "color",
+          "upperMaterial",
+          "soleMaterial",
+          "closure",
+          "toeShape",
+          "occasion",
+          "pattern",
+        ],
+      },
+    ],
+    ["size", "color", "upperMaterial", "soleMaterial"],
+  ),
+  fashionAccessories: createSchema(
+    "Fashion Accessory Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "color",
+          "material",
+          "closure",
+          "compartments",
+          "dimensions",
+          "capacity",
+          "strapMaterial",
+          "dialShape",
+          "displayType",
+          "warranty",
+        ],
+      },
+    ],
+    ["color", "material"],
+  ),
+  homeFurnishing: createSchema(
+    "Home Furnishing Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "color",
+          "fabric",
+          "material",
+          "pattern",
+          "dimensions",
+          "threadCount",
+          "fillMaterial",
+          "packOf",
+        ],
+      },
+    ],
+    ["color", "material", "dimensions"],
+  ),
+  kitchenDining: createSchema(
+    "Kitchen & Dining Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "material",
+          "color",
+          "capacity",
+          "dimensions",
+          "cookwareCompatibility",
+          "closure",
+          "packOf",
+        ],
+      },
+    ],
+    ["material", "capacity", "packOf"],
+  ),
+  decorLighting: createSchema(
+    "Decor & Lighting Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "material",
+          "color",
+          "dimensions",
+          "pattern",
+          "frameMaterial",
+          "powerSource",
+          "plantType",
+          "packOf",
+        ],
+      },
+    ],
+    ["material", "color", "dimensions"],
+  ),
+  kidsClothing: createSchema(
+    "Kids Clothing Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "ageGroup",
+          "size",
+          "color",
+          "fabric",
+          "fitShape",
+          "neck",
+          "sleeveLength",
+          "pattern",
+          "occasion",
+        ],
+      },
+    ],
+    ["ageGroup", "size", "color", "fabric"],
+  ),
+  toys: createSchema(
+    "Toy Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "ageGroup",
+          "material",
+          "color",
+          "batteryRequired",
+          "skillSet",
+          "dimensions",
+          "packOf",
+        ],
+      },
+    ],
+    ["ageGroup", "material", "batteryRequired"],
+  ),
+  personalCare: createSchema(
+    "Personal Care Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "productForm",
+          "skinType",
+          "hairType",
+          "ingredients",
+          "capacity",
+          "expiry",
+          "packOf",
+        ],
+      },
+    ],
+    ["productForm", "capacity", "expiry"],
+  ),
+  mobilesTablets: createSchema(
+    "Mobile & Tablet Details",
+    [
+      {
+        title: "Product Details",
+        fields: ["modelName", "ram", "storage", "color", "displayType", "warranty"],
+      },
+    ],
+    ["modelName", "ram", "storage", "color", "warranty"],
+  ),
+  electronics: createSchema(
+    "Electronics Details",
+    [
+      {
+        title: "Product Details",
+        fields: [
+          "modelName",
+          "material",
+          "color",
+          "capacity",
+          "power",
+          "connectorType",
+          "compatibleDevices",
+          "warranty",
+        ],
+      },
+    ],
+    ["modelName", "power", "warranty"],
+  ),
+  stationery: createSchema(
+    "Stationery Details",
+    [
+      {
+        title: "Product Details",
+        fields: ["material", "color", "pages", "ruling", "inkColor", "dimensions", "packOf"],
+      },
+    ],
+    ["material", "packOf"],
+  ),
+  default: createSchema(
+    "Product Details",
+    [
+      {
+        title: "Product Details",
+        fields: ["color", "material", "capacity", "dimensions", "pattern", "packOf"],
+      },
+    ],
+    ["material"],
+  ),
+} satisfies Record<string, CatalogSchema>;
+
+const getCatalogSchema = (path: string[]) => {
+  const normalizedPath = path.join(" / ").toLowerCase();
+  const [department = "", section = "", group = ""] = path.map((item) => item.toLowerCase());
+
+  if (department.includes("men fashion") || department.includes("women fashion")) {
+    if (
+      normalizedPath.includes("footwear") ||
+      normalizedPath.includes("shoe") ||
+      normalizedPath.includes("slipper") ||
+      normalizedPath.includes("sandal") ||
+      normalizedPath.includes("flip")
+    ) {
+      return catalogSchemas.footwear;
+    }
+    if (
+      normalizedPath.includes("jewellery") ||
+      normalizedPath.includes("accessories") ||
+      normalizedPath.includes("bag") ||
+      normalizedPath.includes("wallet") ||
+      normalizedPath.includes("belt") ||
+      normalizedPath.includes("watch")
+    ) {
+      return catalogSchemas.fashionAccessories;
+    }
+    if (
+      normalizedPath.includes("bottom") ||
+      normalizedPath.includes("jeans") ||
+      normalizedPath.includes("trouser") ||
+      normalizedPath.includes("shorts") ||
+      normalizedPath.includes("track pants") ||
+      normalizedPath.includes("skirt")
+    ) {
+      return catalogSchemas.clothingBottomWear;
+    }
+    if (
+      normalizedPath.includes("saree") ||
+      normalizedPath.includes("kurti") ||
+      normalizedPath.includes("kurta") ||
+      normalizedPath.includes("lehenga") ||
+      normalizedPath.includes("ethnic")
+    ) {
+      return catalogSchemas.ethnicWear;
+    }
+    return catalogSchemas.clothingTopWear;
+  }
+
+  if (department.includes("home") || department.includes("kitchen")) {
+    if (section.includes("furnishing")) return catalogSchemas.homeFurnishing;
+    if (section.includes("kitchen") || section.includes("dining"))
+      return catalogSchemas.kitchenDining;
+    if (section.includes("decor") || group.includes("lighting") || group.includes("plants")) {
+      return catalogSchemas.decorLighting;
+    }
+    return catalogSchemas.homeFurnishing;
+  }
+
+  if (department.includes("kids")) {
+    if (section.includes("clothing")) return catalogSchemas.kidsClothing;
+    if (section.includes("toys")) return catalogSchemas.toys;
+    return catalogSchemas.personalCare;
+  }
+
+  if (department.includes("personal care") || department.includes("wellness")) {
+    return catalogSchemas.personalCare;
+  }
+
+  if (department.includes("mobile") || department.includes("tablet")) {
+    if (section.includes("mobile") || section.includes("tablet"))
+      return catalogSchemas.mobilesTablets;
+    return catalogSchemas.electronics;
+  }
+
+  if (department.includes("consumer electronics")) return catalogSchemas.electronics;
+  if (department.includes("office") || department.includes("stationery"))
+    return catalogSchemas.stationery;
+
+  return catalogSchemas.default;
+};
 
 const formatCatalogDetails = (details?: CatalogDetails) => {
   if (!details) return "";
@@ -1042,6 +1502,7 @@ function CatalogAddWizard({
   const [step, setStep] = useState<"media" | "details">("media");
   const [catalogDetails, setCatalogDetails] = useState<CatalogDetails>(initialCatalogDetails);
   const [sameAsManufacturer, setSameAsManufacturer] = useState(false);
+  const catalogSchema = getCatalogSchema(selectedCategoryPath);
   const imagePreview = newProduct.image_url;
 
   const updateCatalogDetail = (key: string, value: string) => {
@@ -1155,7 +1616,7 @@ function CatalogAddWizard({
             <div className="border-b border-border bg-[#dde3ed] px-4 py-3 text-center text-xs font-medium">
               {selectedCategoryPath.length
                 ? selectedCategoryPath.join(" / ")
-                : mensTshirtCategoryPath.join(" / ")}
+                : "Choose a final product category"}
             </div>
             <div className="p-5">
               <div className="flex aspect-[4/5] items-center justify-center border border-dashed border-border bg-muted/20">
@@ -1184,120 +1645,65 @@ function CatalogAddWizard({
           className="space-y-5 p-5 text-xs"
         >
           <div className="border-b border-border pb-2 font-medium text-[#7f1d1d]">
-            {mensTshirtCategoryPath.join(" / ")}
+            {selectedCategoryPath.join(" / ")}
+          </div>
+          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            {catalogSchema.title}
           </div>
 
-          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
-            <CatalogInput
-              id="netWeight"
-              type="number"
-              value={catalogDetails.netWeight}
-              onChange={(value) => updateCatalogDetail("netWeight", value)}
-              required
-              placeholder="Enter Net Weight (gms)"
-            />
-            <CatalogInput
-              id="styleCode"
-              value={catalogDetails.styleCode}
-              onChange={(value) => updateCatalogDetail("styleCode", value)}
-              placeholder="Enter Style code/Product ID (optional)"
-            />
-            <CatalogInput
-              id="productName"
-              value={newProduct.name || catalogDetails.productName}
-              onChange={(value) => updateCatalogDetail("productName", value)}
-              required
-              placeholder="Enter Product Name"
-            />
-            <CatalogInput
-              id="size"
-              value={catalogDetails.size}
-              onChange={(value) => updateCatalogDetail("size", value)}
-              required
-            />
-          </div>
-
-          <div className="border-b border-border pb-2 pt-2 font-medium">Product Details</div>
-          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
-            {[
-              "color",
-              "fabric",
-              "fitShape",
-              "genericName",
-              "netQuantity",
-              "neck",
-              "occasion",
-              "pattern",
-              "printOrPatternType",
-              "sleeveLength",
-              "countryOfOrigin",
-              "manufacturerName",
-              "manufacturerAddress",
-              "manufacturerPincode",
-              "packerName",
-              "packerAddress",
-              "packerPincode",
-              "importerName",
-              "importerAddress",
-              "importerPincode",
-            ].map((id) => (
-              <Fragment key={id}>
-                <CatalogInput
-                  id={id}
-                  value={catalogDetails[id]}
-                  onChange={(value) => updateCatalogDetail(id, value)}
-                  required={requiredCatalogFields.includes(id)}
-                />
-                {id === "packerName" && (
-                  <label className="lg:col-start-1 lg:ml-[10.25rem] flex items-center gap-2 text-[11px] text-muted-foreground">
-                    <input
-                      type="checkbox"
-                      checked={sameAsManufacturer}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        setSameAsManufacturer(checked);
-                        if (checked) {
-                          setCatalogDetails((current) => ({
-                            ...current,
-                            packerName: current.manufacturerName,
-                            packerAddress: current.manufacturerAddress,
-                            packerPincode: current.manufacturerPincode,
-                          }));
-                        }
-                      }}
-                      className="h-4 w-4 accent-ink"
+          {catalogSchema.sections.map((section, sectionIndex) => (
+            <div key={`${section.title ?? "section"}-${sectionIndex}`} className="space-y-3">
+              {section.title && (
+                <div className="border-b border-border pb-2 pt-2 font-medium">{section.title}</div>
+              )}
+              <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
+                {section.fields.map((id) => (
+                  <Fragment key={id}>
+                    <CatalogInput
+                      id={id}
+                      type={id === "netWeight" ? "number" : "text"}
+                      value={
+                        id === "productName"
+                          ? newProduct.name || catalogDetails.productName
+                          : id === "brand"
+                            ? newProduct.brand
+                            : catalogDetails[id]
+                      }
+                      onChange={(value) => updateCatalogDetail(id, value)}
+                      required={catalogSchema.requiredFields.includes(id)}
+                      placeholder={
+                        id === "styleCode"
+                          ? "Enter Style code/Product ID (optional)"
+                          : `Enter ${catalogFieldLabels[id] ?? id}`
+                      }
                     />
-                    Same as Manufacturer Details
-                  </label>
-                )}
-              </Fragment>
-            ))}
-          </div>
-
-          <div className="border-b border-border pb-2 pt-2 font-medium">Other Attributes</div>
-          <div className="grid gap-x-10 gap-y-3 lg:grid-cols-2">
-            {[
-              "brand",
-              "character",
-              "hemline",
-              "length",
-              "numberOfPockets",
-              "sleeveStyling",
-              "style",
-            ].map((id) => (
-              <CatalogInput
-                key={id}
-                id={id}
-                value={id === "brand" ? newProduct.brand : catalogDetails[id]}
-                onChange={(value) => updateCatalogDetail(id, value)}
-              />
-            ))}
-            <CatalogInput
-              id="description"
-              value={catalogDetails.description}
-              onChange={(value) => updateCatalogDetail("description", value)}
-            />
-          </div>
+                    {id === "packerName" && (
+                      <label className="lg:col-start-1 lg:ml-[10.25rem] flex items-center gap-2 text-[11px] text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          checked={sameAsManufacturer}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setSameAsManufacturer(checked);
+                            if (checked) {
+                              setCatalogDetails((current) => ({
+                                ...current,
+                                packerName: current.manufacturerName,
+                                packerAddress: current.manufacturerAddress,
+                                packerPincode: current.manufacturerPincode,
+                              }));
+                            }
+                          }}
+                          className="h-4 w-4 accent-ink"
+                        />
+                        Same as Manufacturer Details
+                      </label>
+                    )}
+                  </Fragment>
+                ))}
+              </div>
+            </div>
+          ))}
 
           <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-3">
             <CatalogInput
@@ -1591,17 +1997,24 @@ function AdminPage() {
       const slug =
         newProduct.slug.trim() || newProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       const formattedCatalogDetails = formatCatalogDetails(catalogDetails);
+      const selectedSchema = getCatalogSchema(selectedCategoryPath);
       const shortDescription =
         newProduct.short_description.trim() ||
         [
+          selectedSchema.title,
           catalogDetails?.fabric,
+          catalogDetails?.material,
           catalogDetails?.fitShape,
+          catalogDetails?.color,
           catalogDetails?.neck,
           catalogDetails?.sleeveLength,
+          catalogDetails?.capacity,
+          catalogDetails?.warranty,
         ]
           .filter(Boolean)
           .join(" | ") ||
-        "Men's T-shirt";
+        selectedCategoryPath.at(-1) ||
+        "Catalog product";
       const description =
         newProduct.description.trim() ||
         [catalogDetails?.description, formattedCatalogDetails].filter(Boolean).join("\n\n");
