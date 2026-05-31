@@ -916,6 +916,7 @@ export const adminAddProduct = createServerFn({ method: "POST" })
       description: string;
       sku: string;
       price: number;
+      compare_at_price?: number;
       stock: number;
       category_id: string;
       brand: string;
@@ -930,6 +931,7 @@ export const adminAddProduct = createServerFn({ method: "POST" })
           description: z.string().min(1),
           sku: z.string().min(1),
           price: z.number().positive(),
+          compare_at_price: z.number().positive().optional(),
           stock: z.number().nonnegative(),
           category_id: z.string().min(1),
           brand: z.string().min(1),

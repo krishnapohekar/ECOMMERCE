@@ -628,6 +628,9 @@ const emptyNewProduct = {
   description: "",
   sku: "",
   price: 0,
+  compare_at_price: 0,
+  discount_percent: 0,
+  shipping_cost: 0,
   stock: 0,
   category_id: "",
   brand: "Sheetal",
@@ -661,6 +664,10 @@ const defaultRequiredFields = [
   "netWeight",
   "productName",
   "genericName",
+  "compare_at_price",
+  "price",
+  "sku",
+  "stock",
   "netQuantity",
   ...complianceFields,
 ];
@@ -736,6 +743,9 @@ const catalogFieldLabels: Record<string, string> = {
   brand: "Brand",
   sku: "SKU",
   price: "Unit Price",
+  compare_at_price: "MRP",
+  discount_percent: "Discount",
+  shipping_cost: "Shipping Cost",
   stock: "Stock Count",
   character: "Character",
   hemline: "Hemline",
@@ -825,7 +835,19 @@ const createSchema = (
   sections: [
     {
       title: "Product, Size and Inventory",
-      fields: ["netWeight", "styleCode", "productName", "genericName", "netQuantity"],
+      fields: [
+        "netWeight",
+        "styleCode",
+        "productName",
+        "genericName",
+        "compare_at_price",
+        "discount_percent",
+        "price",
+        "shipping_cost",
+        "sku",
+        "stock",
+        "netQuantity",
+      ],
     },
     ...sections,
     { title: "Compliance Details", fields: complianceFields },
@@ -1190,6 +1212,171 @@ const getCatalogSchema = (path: string[]) => {
   return catalogSchemas.default;
 };
 
+const getGenericNameOptions = (path: string[]) => {
+  const normalizedPath = path.join(" / ").toLowerCase();
+  const leaf = path.at(-1)?.toLowerCase() ?? "";
+
+  if (normalizedPath.includes("saree")) return ["Saree", "Silk Saree", "Cotton Saree"];
+  if (normalizedPath.includes("kurti")) return ["Kurti", "Printed Kurti", "A-Line Kurti"];
+  if (normalizedPath.includes("kurta")) return ["Kurta", "Kurta Set", "Ethnic Kurta"];
+  if (normalizedPath.includes("lehenga")) return ["Lehenga", "Lehenga Choli", "Party Lehenga"];
+  if (normalizedPath.includes("shirt")) return ["Shirt", "Casual Shirt", "Formal Shirt"];
+  if (normalizedPath.includes("t-shirt") || normalizedPath.includes("tshirt")) {
+    return ["T-shirt", "Polo T-shirt", "Graphic T-shirt", "Casual T-shirt"];
+  }
+  if (normalizedPath.includes("vest")) return ["Vest", "Men's Vest"];
+  if (normalizedPath.includes("boxer")) return ["Boxer", "Men's Boxer"];
+  if (normalizedPath.includes("brief")) return ["Brief", "Men's Brief"];
+  if (normalizedPath.includes("night suit")) return ["Night Suit", "Sleepwear Set"];
+  if (normalizedPath.includes("jeans")) return ["Jeans", "Denim Jeans", "Slim Fit Jeans"];
+  if (normalizedPath.includes("trouser")) return ["Trousers", "Formal Trousers", "Casual Trousers"];
+  if (normalizedPath.includes("shorts")) return ["Shorts", "Cotton Shorts", "Sports Shorts"];
+  if (normalizedPath.includes("track pants")) return ["Track Pants", "Joggers"];
+  if (normalizedPath.includes("skirt")) return ["Skirt", "Women's Skirt"];
+  if (normalizedPath.includes("dress")) return ["Dress", "Maxi Dress", "Midi Dress"];
+  if (normalizedPath.includes("top")) return ["Top", "Casual Top", "Crop Top", "Tunic"];
+  if (normalizedPath.includes("earring")) return ["Earrings", "Fashion Earrings"];
+  if (normalizedPath.includes("necklace")) return ["Necklace", "Jewellery Necklace"];
+  if (normalizedPath.includes("bangle")) return ["Bangles", "Bracelet"];
+  if (normalizedPath.includes("ring")) return ["Ring", "Fashion Ring"];
+  if (normalizedPath.includes("handbag")) return ["Handbag", "Women's Handbag"];
+  if (normalizedPath.includes("sling bag")) return ["Sling Bag", "Crossbody Bag"];
+  if (normalizedPath.includes("wallet")) return ["Wallet", "Card Wallet"];
+  if (normalizedPath.includes("clutch")) return ["Clutch", "Party Clutch"];
+  if (normalizedPath.includes("belt")) return ["Belt", "Formal Belt", "Casual Belt"];
+  if (normalizedPath.includes("watch")) return ["Watch", "Analog Watch", "Smart Watch"];
+  if (normalizedPath.includes("shoe"))
+    return ["Shoes", "Casual Shoes", "Formal Shoes", "Sports Shoes"];
+  if (normalizedPath.includes("slipper") || normalizedPath.includes("flip")) {
+    return ["Slippers", "Flip Flops", "Slides"];
+  }
+  if (normalizedPath.includes("sandal") || normalizedPath.includes("floater")) {
+    return ["Sandals", "Floaters"];
+  }
+  if (
+    normalizedPath.includes("mojari") ||
+    normalizedPath.includes("kolhapuri") ||
+    normalizedPath.includes("jutti")
+  ) {
+    return ["Ethnic Footwear", "Mojari", "Jutti"];
+  }
+  if (normalizedPath.includes("sock")) return ["Socks", "Shoe Socks"];
+  if (normalizedPath.includes("insole")) return ["Insoles", "Shoe Insoles"];
+  if (normalizedPath.includes("shoe care")) return ["Shoe Care", "Shoe Care Kit"];
+  if (normalizedPath.includes("bedsheet"))
+    return ["Bedsheet", "Double Bedsheet", "Single Bedsheet"];
+  if (normalizedPath.includes("curtain")) return ["Curtain", "Door Curtain", "Window Curtain"];
+  if (normalizedPath.includes("cushion")) return ["Cushion Cover", "Cushion"];
+  if (normalizedPath.includes("pillow")) return ["Pillow Cover", "Pillow"];
+  if (normalizedPath.includes("diwan")) return ["Diwan Set", "Diwan Cover Set"];
+  if (normalizedPath.includes("pan")) return ["Pan", "Cookware Pan"];
+  if (normalizedPath.includes("kadhai")) return ["Kadhai", "Cookware Kadhai"];
+  if (normalizedPath.includes("pressure cooker")) return ["Pressure Cooker", "Cooker"];
+  if (normalizedPath.includes("dinner set")) return ["Dinner Set", "Dinnerware Set"];
+  if (normalizedPath.includes("plate")) return ["Plate", "Dinner Plate"];
+  if (normalizedPath.includes("bowl")) return ["Bowl", "Serving Bowl"];
+  if (normalizedPath.includes("mug")) return ["Mug", "Coffee Mug"];
+  if (normalizedPath.includes("container")) return ["Container", "Storage Container"];
+  if (normalizedPath.includes("jar")) return ["Jar", "Storage Jar"];
+  if (normalizedPath.includes("lunch box")) return ["Lunch Box", "Tiffin Box"];
+  if (normalizedPath.includes("wall sticker")) return ["Wall Sticker", "Wall Decal"];
+  if (normalizedPath.includes("painting")) return ["Painting", "Wall Painting"];
+  if (normalizedPath.includes("clock")) return ["Clock", "Wall Clock"];
+  if (normalizedPath.includes("lamp")) return ["Lamp", "Table Lamp"];
+  if (normalizedPath.includes("string light")) return ["String Lights", "Decorative Lights"];
+  if (normalizedPath.includes("lantern")) return ["Lantern", "Decorative Lantern"];
+  if (normalizedPath.includes("artificial plant")) return ["Artificial Plant", "Artificial Flower"];
+  if (normalizedPath.includes("planter")) return ["Planter", "Plant Pot"];
+  if (normalizedPath.includes("vase")) return ["Vase", "Flower Vase"];
+  if (normalizedPath.includes("frock")) return ["Frock", "Girls Frock"];
+  if (normalizedPath.includes("legging")) return ["Leggings", "Kids Leggings"];
+  if (normalizedPath.includes("ethnic set")) return ["Ethnic Set", "Kids Ethnic Set"];
+  if (normalizedPath.includes("romper")) return ["Romper", "Baby Romper"];
+  if (normalizedPath.includes("bodysuit")) return ["Bodysuit", "Baby Bodysuit"];
+  if (normalizedPath.includes("sweater")) return ["Sweater", "Kids Sweater"];
+  if (normalizedPath.includes("puzzle")) return ["Puzzle", "Learning Puzzle"];
+  if (normalizedPath.includes("flash card")) return ["Flash Cards", "Learning Cards"];
+  if (normalizedPath.includes("activity kit")) return ["Activity Kit", "Learning Kit"];
+  if (normalizedPath.includes("teddy")) return ["Teddy Bear", "Soft Toy"];
+  if (normalizedPath.includes("plush")) return ["Plush Toy", "Soft Toy"];
+  if (normalizedPath.includes("character toy")) return ["Character Toy", "Soft Toy"];
+  if (normalizedPath.includes("ride on")) return ["Ride On Toy", "Outdoor Toy"];
+  if (normalizedPath.includes("sports toy")) return ["Sports Toy", "Outdoor Toy"];
+  if (normalizedPath.includes("water toy")) return ["Water Toy", "Outdoor Toy"];
+  if (normalizedPath.includes("bottle")) return ["Feeding Bottle", "Baby Bottle"];
+  if (normalizedPath.includes("sipper")) return ["Sipper", "Baby Sipper"];
+  if (normalizedPath.includes("bib")) return ["Bib", "Baby Bib"];
+  if (normalizedPath.includes("diaper")) return ["Diaper", "Baby Diaper"];
+  if (normalizedPath.includes("wipe")) return ["Wipes", "Baby Wipes"];
+  if (normalizedPath.includes("changing mat")) return ["Changing Mat", "Baby Changing Mat"];
+  if (normalizedPath.includes("face wash")) return ["Face Wash", "Skin Cleanser"];
+  if (normalizedPath.includes("moisturizer")) return ["Moisturizer", "Face Cream"];
+  if (normalizedPath.includes("sunscreen")) return ["Sunscreen", "Sun Protection"];
+  if (normalizedPath.includes("serum")) return ["Serum", "Face Serum"];
+  if (normalizedPath.includes("shampoo")) return ["Shampoo", "Hair Shampoo"];
+  if (normalizedPath.includes("conditioner")) return ["Conditioner", "Hair Conditioner"];
+  if (normalizedPath.includes("hair oil")) return ["Hair Oil", "Hair Care Oil"];
+  if (normalizedPath.includes("hair color")) return ["Hair Color", "Hair Dye"];
+  if (normalizedPath.includes("lipstick")) return ["Lipstick", "Lip Color"];
+  if (normalizedPath.includes("foundation")) return ["Foundation", "Face Foundation"];
+  if (normalizedPath.includes("kajal")) return ["Kajal", "Eye Kajal"];
+  if (normalizedPath.includes("nail polish")) return ["Nail Polish", "Nail Paint"];
+  if (normalizedPath.includes("vitamin")) return ["Vitamins", "Health Supplement"];
+  if (normalizedPath.includes("protein")) return ["Protein", "Protein Supplement"];
+  if (normalizedPath.includes("ayurvedic")) return ["Ayurvedic Supplement", "Health Supplement"];
+  if (normalizedPath.includes("sanitary")) return ["Sanitary Pads", "Personal Hygiene Product"];
+  if (normalizedPath.includes("hand wash")) return ["Hand Wash", "Hand Cleanser"];
+  if (normalizedPath.includes("body wash")) return ["Body Wash", "Shower Gel"];
+  if (normalizedPath.includes("yoga mat")) return ["Yoga Mat", "Fitness Mat"];
+  if (normalizedPath.includes("resistance band")) return ["Resistance Band", "Fitness Band"];
+  if (normalizedPath.includes("massager")) return ["Massager", "Body Massager"];
+  if (normalizedPath.includes("smartphone")) return ["Smartphone", "Mobile Phone"];
+  if (normalizedPath.includes("feature phone")) return ["Feature Phone", "Mobile Phone"];
+  if (normalizedPath.includes("refurbished phone")) return ["Refurbished Phone", "Mobile Phone"];
+  if (normalizedPath.includes("case") || normalizedPath.includes("cover"))
+    return ["Case Cover", "Mobile Cover"];
+  if (normalizedPath.includes("screen guard")) return ["Screen Guard", "Screen Protector"];
+  if (normalizedPath.includes("charger")) return ["Charger", "Mobile Charger"];
+  if (normalizedPath.includes("data cable")) return ["Data Cable", "Charging Cable"];
+  if (normalizedPath.includes("tablet")) return ["Tablet", "Android Tablet"];
+  if (normalizedPath.includes("power bank")) return ["Power Bank", "Portable Charger"];
+  if (normalizedPath.includes("earphone")) return ["Earphones", "Wired Earphones"];
+  if (normalizedPath.includes("bluetooth speaker"))
+    return ["Bluetooth Speaker", "Wireless Speaker"];
+  if (normalizedPath.includes("mixer grinder")) return ["Mixer Grinder", "Kitchen Appliance"];
+  if (normalizedPath.includes("electric kettle")) return ["Electric Kettle", "Kettle"];
+  if (normalizedPath.includes("induction cooktop")) return ["Induction Cooktop", "Cooktop"];
+  if (normalizedPath.includes("iron")) return ["Iron", "Clothes Iron"];
+  if (normalizedPath.includes("fan")) return ["Fan", "Home Fan"];
+  if (normalizedPath.includes("vacuum cleaner")) return ["Vacuum Cleaner", "Home Cleaner"];
+  if (normalizedPath.includes("trimmer")) return ["Trimmer", "Grooming Trimmer"];
+  if (normalizedPath.includes("hair dryer")) return ["Hair Dryer", "Dryer"];
+  if (normalizedPath.includes("straightener")) return ["Hair Straightener", "Straightener"];
+  if (normalizedPath.includes("headphone")) return ["Headphones", "Audio Headphones"];
+  if (normalizedPath.includes("neckband")) return ["Neckband", "Bluetooth Neckband"];
+  if (normalizedPath.includes("speaker")) return ["Speaker", "Audio Speaker"];
+  if (normalizedPath.includes("keyboard")) return ["Keyboard", "Computer Keyboard"];
+  if (normalizedPath.includes("mouse")) return ["Mouse", "Computer Mouse"];
+  if (normalizedPath.includes("usb hub")) return ["USB Hub", "Computer Accessory"];
+  if (normalizedPath.includes("cctv")) return ["CCTV Camera", "Security Camera"];
+  if (normalizedPath.includes("action camera")) return ["Action Camera", "Camera"];
+  if (normalizedPath.includes("doorbell")) return ["Smart Doorbell", "Doorbell Camera"];
+  if (normalizedPath.includes("notebook")) return ["Notebook", "Writing Notebook"];
+  if (normalizedPath.includes("register")) return ["Register", "Writing Register"];
+  if (normalizedPath.includes("diary")) return ["Diary", "Personal Diary"];
+  if (normalizedPath.includes("document file")) return ["Document File", "File Folder"];
+  if (leaf.includes("folder")) return ["Folder", "File Folder"];
+  if (normalizedPath.includes("clipboard")) return ["Clipboard", "Writing Clipboard"];
+  if (normalizedPath.includes("ball pen")) return ["Ball Pen", "Pen"];
+  if (normalizedPath.includes("gel pen")) return ["Gel Pen", "Pen"];
+  if (normalizedPath.includes("metal pen")) return ["Metal Pen", "Pen"];
+  if (normalizedPath.includes("wooden pencil")) return ["Wooden Pencil", "Pencil"];
+  if (normalizedPath.includes("mechanical pencil")) return ["Mechanical Pencil", "Pencil"];
+  if (normalizedPath.includes("color pencil")) return ["Color Pencil", "Pencil Set"];
+
+  return [path.at(-1) ?? "Product", catalogFieldLabels.genericName];
+};
+
 const formatCatalogDetails = (details?: CatalogDetails) => {
   if (!details) return "";
   return Object.entries(catalogFieldLabels)
@@ -1200,6 +1387,15 @@ const formatCatalogDetails = (details?: CatalogDetails) => {
     .filter(Boolean)
     .join("\n");
 };
+
+const formatProductPricingDetails = (product: NewProductDraft) =>
+  [
+    product.compare_at_price > 0 ? `MRP: ${formatPrice(product.compare_at_price)}` : "",
+    product.discount_percent > 0 ? `Discount: ${product.discount_percent}%` : "",
+    product.shipping_cost > 0 ? `Shipping Cost: ${formatPrice(product.shipping_cost)}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
 const collectLeafPaths = (nodes: CategoryNode[], parent: string[] = []): string[][] =>
   nodes.flatMap((node) => {
@@ -1424,6 +1620,7 @@ function CatalogInput({
   required,
   type = "text",
   placeholder,
+  optionsOverride,
 }: {
   id: string;
   value: string;
@@ -1431,8 +1628,9 @@ function CatalogInput({
   required?: boolean;
   type?: string;
   placeholder?: string;
+  optionsOverride?: string[];
 }) {
-  const options = selectOptions[id];
+  const options = optionsOverride ?? selectOptions[id];
   const label = catalogFieldLabels[id] ?? id;
 
   return (
@@ -1517,6 +1715,71 @@ function CatalogAddWizard({
       if (key === "brand") setNewProduct({ ...newProduct, brand: value || "Sheetal" });
       return next;
     });
+  };
+
+  const productFieldIds = [
+    "sku",
+    "price",
+    "compare_at_price",
+    "discount_percent",
+    "shipping_cost",
+    "stock",
+  ];
+
+  const updateProductField = (key: string, value: string) => {
+    if (key === "sku") {
+      setNewProduct({ ...newProduct, sku: value });
+      return;
+    }
+
+    if (key === "stock") {
+      setNewProduct({ ...newProduct, stock: parseInt(value, 10) || 0 });
+      return;
+    }
+
+    const numericValue = parseFloat(value) || 0;
+
+    if (key === "compare_at_price") {
+      const discountedPrice =
+        newProduct.discount_percent > 0
+          ? numericValue - numericValue * (newProduct.discount_percent / 100)
+          : numericValue;
+      setNewProduct({
+        ...newProduct,
+        compare_at_price: numericValue,
+        price: Number(discountedPrice.toFixed(2)) || 0,
+      });
+      return;
+    }
+
+    if (key === "discount_percent") {
+      const cappedDiscount = Math.min(Math.max(numericValue, 0), 100);
+      const discountedPrice =
+        newProduct.compare_at_price > 0
+          ? newProduct.compare_at_price - newProduct.compare_at_price * (cappedDiscount / 100)
+          : newProduct.price;
+      setNewProduct({
+        ...newProduct,
+        discount_percent: cappedDiscount,
+        price: Number(discountedPrice.toFixed(2)) || 0,
+      });
+      return;
+    }
+
+    if (key === "shipping_cost") {
+      setNewProduct({ ...newProduct, shipping_cost: numericValue });
+      return;
+    }
+
+    if (key === "price") {
+      setNewProduct({ ...newProduct, price: numericValue });
+    }
+  };
+
+  const getProductFieldValue = (key: string) => {
+    if (key === "sku") return newProduct.sku;
+    const value = newProduct[key as keyof NewProductDraft];
+    return typeof value === "number" && value > 0 ? String(value) : "";
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1661,20 +1924,37 @@ function CatalogAddWizard({
                   <Fragment key={id}>
                     <CatalogInput
                       id={id}
-                      type={id === "netWeight" ? "number" : "text"}
+                      type={
+                        id === "netWeight" || (productFieldIds.includes(id) && id !== "sku")
+                          ? "number"
+                          : "text"
+                      }
                       value={
                         id === "productName"
                           ? newProduct.name || catalogDetails.productName
-                          : id === "brand"
-                            ? newProduct.brand
-                            : catalogDetails[id]
+                          : productFieldIds.includes(id)
+                            ? getProductFieldValue(id)
+                            : id === "brand"
+                              ? newProduct.brand
+                              : catalogDetails[id]
                       }
-                      onChange={(value) => updateCatalogDetail(id, value)}
+                      onChange={(value) =>
+                        productFieldIds.includes(id)
+                          ? updateProductField(id, value)
+                          : updateCatalogDetail(id, value)
+                      }
                       required={catalogSchema.requiredFields.includes(id)}
+                      optionsOverride={
+                        id === "genericName"
+                          ? getGenericNameOptions(selectedCategoryPath)
+                          : undefined
+                      }
                       placeholder={
                         id === "styleCode"
                           ? "Enter Style code/Product ID (optional)"
-                          : `Enter ${catalogFieldLabels[id] ?? id}`
+                          : id === "discount_percent"
+                            ? "Enter Discount %"
+                            : `Enter ${catalogFieldLabels[id] ?? id}`
                       }
                     />
                     {id === "packerName" && (
@@ -1704,34 +1984,6 @@ function CatalogAddWizard({
               </div>
             </div>
           ))}
-
-          <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-3">
-            <CatalogInput
-              id="sku"
-              value={newProduct.sku}
-              onChange={(value) => setNewProduct({ ...newProduct, sku: value })}
-              required
-              placeholder="Enter SKU"
-            />
-            <CatalogInput
-              id="price"
-              type="number"
-              value={newProduct.price ? String(newProduct.price) : ""}
-              onChange={(value) => setNewProduct({ ...newProduct, price: parseFloat(value) || 0 })}
-              required
-              placeholder="Enter Unit Price"
-            />
-            <CatalogInput
-              id="stock"
-              type="number"
-              value={newProduct.stock ? String(newProduct.stock) : ""}
-              onChange={(value) =>
-                setNewProduct({ ...newProduct, stock: parseInt(value, 10) || 0 })
-              }
-              required
-              placeholder="Enter Stock Count"
-            />
-          </div>
 
           <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
             <button
@@ -1997,6 +2249,7 @@ function AdminPage() {
       const slug =
         newProduct.slug.trim() || newProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       const formattedCatalogDetails = formatCatalogDetails(catalogDetails);
+      const formattedPricingDetails = formatProductPricingDetails(newProduct);
       const selectedSchema = getCatalogSchema(selectedCategoryPath);
       const shortDescription =
         newProduct.short_description.trim() ||
@@ -2017,11 +2270,18 @@ function AdminPage() {
         "Catalog product";
       const description =
         newProduct.description.trim() ||
-        [catalogDetails?.description, formattedCatalogDetails].filter(Boolean).join("\n\n");
+        [catalogDetails?.description, formattedPricingDetails, formattedCatalogDetails]
+          .filter(Boolean)
+          .join("\n\n");
+      const {
+        discount_percent: _discountPercent,
+        shipping_cost: _shippingCost,
+        ...productData
+      } = newProduct;
 
       await addProduct({
         data: {
-          ...newProduct,
+          ...productData,
           slug,
           short_description: shortDescription,
           description,
